@@ -7,6 +7,11 @@ external files into the storage.
 
 More information about the machine itself: [http://ibm-1401.info](http://ibm-1401.info)
 
+<img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/BRL61-IBM_1401.jpg" width="400">
+
+*> Image: [https://upload.wikimedia.org/wikipedia/commons/c/cb/BRL61-IBM_1401.jpg](https://upload.wikimedia.org/wikipedia/commons/c/cb/BRL61-IBM_1401.jpg)*
+
+
 ### Emulator commands
 
 * l: Load program into storage
