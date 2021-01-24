@@ -1,4 +1,4 @@
-# IBM-1401 Swift Emulator
+# IBM-1401 Emulator in Swift 
 
 This project is some **early** and inclomplete version of an IBM-1401 emulator written in vanilla Swift without any external libraries. 
 
