@@ -6,6 +6,14 @@
 //
 
 final class CoreStorage {
+    var count: Int {
+        storage.count
+    }
+
+    var storageSize: StorageSize {
+        return size
+    }
+
     private let size: StorageSize
     private var storage = [Word]()
 
@@ -24,10 +32,6 @@ final class CoreStorage {
         }
         
         self.size = size
-    }
-    
-    func count() -> Int {
-        return storage.count
     }
     
     func get(from addr: Int, setZero: Bool = true) -> Word {
@@ -60,9 +64,5 @@ final class CoreStorage {
         if addr <= storage.count {
             storage[addr].setCheckBit()
         }
-    }
-    
-    func storageSize() -> StorageSize {
-        return size
     }
 }

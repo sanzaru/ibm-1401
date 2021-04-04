@@ -32,6 +32,10 @@ struct MonitorData {
 
 
 final class IBM1401 {
+    var monitorData: MonitorData {
+        pu.monitorData
+    }
+
     private let pu: ProcessingUnit
     
     private var cycles: Int = 0
@@ -77,10 +81,6 @@ final class IBM1401 {
         return encoded.count
     }
     
-    func monitorData() -> MonitorData {
-        pu.monitorData()
-    }
-    
     func dumpStorage() {
         let breakPoint = 20
         
@@ -109,7 +109,7 @@ final class IBM1401 {
         var row = 0
         leading(index: 0)
         
-        for i in 0..<pu.coreStorage.count() {
+        for i in 0..<pu.coreStorage.count {
             let v = String(format: "%03d", pu.coreStorage.get(from: i, setZero: false))
             
             if i > 0 && i % breakPoint == 0 {
@@ -123,7 +123,7 @@ final class IBM1401 {
                 leading(index: (row*breakPoint))
             }
                         
-            print(v, terminator: i == pu.coreStorage.count()-1 ? "" : ",")
+            print(v, terminator: i == pu.coreStorage.count-1 ? "" : ",")
         }
     }
     

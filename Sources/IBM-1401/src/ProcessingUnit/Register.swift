@@ -6,6 +6,14 @@
 //
 
 class Register {
+    var isValid: Bool {
+        validityCheck ? value.parityCheck && value.isValid : value.parityCheck
+    }
+
+    var isDecimal: Bool {
+        value & 0b00110000 == 0
+    }
+
     private var value: Word = Word()
     private var validityCheck: Bool = false
     private var needCheck: Bool = false
@@ -29,13 +37,5 @@ class Register {
     
     func setWordMark() {
         value.setWordMark()
-    }
-    
-    func isValid() -> Bool {
-        return validityCheck ? value.parityCheck() && value.isValid() : value.parityCheck()
-    }
-    
-    func isDecimal() -> Bool {
-        return self.value & 0b00110000 == 0
     }
 }

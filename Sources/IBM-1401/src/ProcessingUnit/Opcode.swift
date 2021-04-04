@@ -5,9 +5,8 @@
 //  Created by Martin Albrecht on 03.06.20.
 //
 
+/// Opcode definitions
 extension ProcessingUnit {
-    
-    /// Opcode definitions
     internal enum Opcodes: Character {
         case setWordMark = ","
         case clearStorage = "/"
@@ -18,9 +17,11 @@ extension ProcessingUnit {
         case noop = "N"
         case load = "L"
     }
-    
-    // MARK: - E-Phase methods
-    
+}
+
+
+// MARK: - E-Phase methods
+extension ProcessingUnit {
     /// General A-Cycle for execution phases
     private func generalEPhaseCycleA() {
         // A-Addr-Reg to STAR
@@ -43,8 +44,14 @@ extension ProcessingUnit {
         
         // FIXME: Implement parity and validity checks...
     }
-    
-    /// Set word mark instuction
+}
+
+
+// MARK: - Instructions
+
+
+/// Set word mark instuction
+extension ProcessingUnit {
     internal func op_setWordmark() {
         // B-Cycle
         func cycleB() {
@@ -90,14 +97,17 @@ extension ProcessingUnit {
             cycleB()
         }
     }
-    
-    /// Clear storage instruction
-    /// NOTE: This instruction always skips the A-Cycle of the I-Operation
+}
+
+
+/// Clear storage instruction
+/// NOTE: This instruction always skips the A-Cycle of the I-Operation
+extension ProcessingUnit {
     internal func op_clearStorage() throws {
         var addr = addrToInt(addrIn: registers.addrB)
         
         // Calculate the address the instruction should end
-        let end = Int(registers.addrB[0].decode()) * 100
+        let end = Int(registers.addrB[0].decoded) * 100
         
         dump("RUNNING CLEAR STORAGE: \(registers.addrB) - From: \(addr) - \(end)...")
         
@@ -120,11 +130,13 @@ extension ProcessingUnit {
             // FIXME: Implement parity and validity checks...
         } while addr >= end
     }
-    
-    /// Halt instruction
+}
+
+/// Halt instruction
+extension ProcessingUnit {
     internal func op_halt() throws {
         // Check OP code for decimal
-        if !registers.i.isDecimal() {
+        if !registers.i.isDecimal {
             // Determine if cycle phase is #4
             iAddrRegBlocked = iPhaseCount == 4
             
@@ -137,8 +149,10 @@ extension ProcessingUnit {
         // Eliminate e-phase
         stopExecutionPhase()
     }
-    
-    /// Move instruction
+}
+
+/// Move instruction
+extension ProcessingUnit {
     internal func op_move() throws {
         var end = false
         repeat {
@@ -160,12 +174,12 @@ extension ProcessingUnit {
             dump("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111)")
             
             // Check A- and B-Register for WM
-            if registers.a.get().hasWordmark() || registers.b.get().hasWordmark() {
+            if registers.a.get().hasWordmark || registers.b.get().hasWordmark {
                 
                 // Send WM to core storage if needed
-                if registers.b.get().hasWordmark() {
+                if registers.b.get().hasWordmark {
                     var value = registers.a.get() | 0b10000000
-                    if !value.parityCheck() {
+                    if !value.parityCheck {
                         value.setCheckBit()
                     }
                     coreStorage.set(at: addr, with: value)
@@ -190,8 +204,11 @@ extension ProcessingUnit {
             }
         } while !end
     }
-    
-    /// Move digit instruction
+}
+
+
+/// Move digit instruction
+extension ProcessingUnit {
     internal func op_move_digit_zone() throws {
         // Run general A-Cycle
         generalEPhaseCycleA()
@@ -222,7 +239,7 @@ extension ProcessingUnit {
         }
         
         // Set check bit if needed
-        if !value.parityCheck() {
+        if !value.parityCheck {
             value.setCheckBit()
         }
         
@@ -236,8 +253,11 @@ extension ProcessingUnit {
         
         // FIXME: Implement parity and validity checks...
     }
-    
-    /// Load instruction
+}
+
+
+/// Load instruction
+extension ProcessingUnit {
     internal func op_load() throws {
         var quit = false
         
@@ -265,11 +285,14 @@ extension ProcessingUnit {
             // FIXME: Implement parity and validity checks...
             
             // Check for WM in A-Reg
-            quit = registers.a.get().hasWordmark()
+            quit = registers.a.get().hasWordmark
         } while !quit
     }
-    
-    /// No operation instruction
+}
+
+
+/// No operation instruction
+extension ProcessingUnit {
     internal func op_noop() throws {
         return
     }

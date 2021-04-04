@@ -65,8 +65,8 @@ class ProcessingUnit {
     internal func addrToInt(addrIn: [Word], encoded: Bool = false) -> Int {
         var addr: Int = 0
             
-        addr += Int(addrIn[2].decode())
-        addr += Int(addrIn[1].decode()) * 10
+        addr += Int(addrIn[2].decoded)
+        addr += Int(addrIn[1].decoded) * 10
         
         // Check for special addressing
         // Addresses above 999 are still addressed via three character addresses on the 1401. Special characters and
@@ -74,30 +74,30 @@ class ProcessingUnit {
         
         // 3000 - 3999: 12th zone
         if addrIn[0] & 0b00110000 != 0 {
-            if let index = AddressZonePrefix.twelve.firstIndex(of: String(addrIn[0].char() ?? Character(""))) {
+            if let index = AddressZonePrefix.twelve.firstIndex(of: String(addrIn[0].char ?? Character(""))) {
                 addr += 3100 + (index * 100)
             } else {
-                addr += 3000 + Int(addrIn[0].decode())
+                addr += 3000 + Int(addrIn[0].decoded)
             }
         }
         // 2000 - 2999: 11th zone
         else if addrIn[0] & 0b00100000 != 0 {
-            if let index = AddressZonePrefix.eleven.firstIndex(of: String(addrIn[0].char() ?? Character(""))) {
+            if let index = AddressZonePrefix.eleven.firstIndex(of: String(addrIn[0].char ?? Character(""))) {
                 addr += 2100 + (index * 100)
             } else {
-                addr += 2000 + Int(addrIn[0].decode())
+                addr += 2000 + Int(addrIn[0].decoded)
             }
         }
         // 1000 - 1999: Zero zone
         else if addrIn[0] & 0b00010000 != 0 {
-            let ch = addrIn[0].char() ?? Character("")
+            let ch = addrIn[0].char ?? Character("")
             if let index = AddressZonePrefix.zero.firstIndex(of: String(ch)) {
                 addr += 1000 + (index * 100)
             }
         }
         // 0 - 999: No zone
         else {
-            addr += Int(addrIn[0].decode()) * 100
+            addr += Int(addrIn[0].decoded) * 100
         }
         
         let ret = Int(addr)
@@ -113,11 +113,11 @@ class ProcessingUnit {
         let parts = addrIn.digits.reversed()
         
         for p in parts {
-            addr.append(Word(p).encode())
+            addr.append(Word(p).encoded)
         }
         
         while addr.count < 3 {
-            addr.append(Word(0).encode())
+            addr.append(Word(0).encoded)
         }
         
         // Replace with special character, if address is above 999
@@ -125,17 +125,17 @@ class ProcessingUnit {
             if addrIn <= 1999 {
                 let index = (addrIn % 1000) / 100
                 if index <= addr.count {
-                    addr[2] = Word(AddressZonePrefix.zero[index])!.encode()
+                    addr[2] = Word(AddressZonePrefix.zero[index])!.encoded
                 }
             } else if addrIn > 1999 && addrIn <= 2999 {
                 let index = (addrIn % 2000) / 100
                 if index <= addr.count {
-                    addr[2] = Word(AddressZonePrefix.eleven[index])!.encode()
+                    addr[2] = Word(AddressZonePrefix.eleven[index])!.encoded
                 }
             } else if addrIn > 2999 && addrIn <= 3999 {
                 let index = (addrIn % 3000) / 100
                 if index <= addr.count {
-                    addr[2] = Word(AddressZonePrefix.twelve[index])!.encode()
+                    addr[2] = Word(AddressZonePrefix.twelve[index])!.encoded
                 }
             }
         }
@@ -208,14 +208,14 @@ extension ProcessingUnit {
             // Fetch instruction from address, drop word mark and reverse C-Bit
             registers.i.set(with: (registers.b.get() & 0b01111111) ^ 0b01000000)
             
-            dump("I-OP Instruction: \(registers.i):\(registers.i.get().char() ?? Character(""))")
+            dump("I-OP Instruction: \(registers.i):\(registers.i.get().char ?? Character(""))")
             
         case 1, 2:
             let addr = cycleIStart()
             dump("ADDR I-\(iPhaseCount == 1 ? "1" : "2"): \(addr) : \(registers.addrI)")
             
             // Check for WM in B-Reg
-            if !registers.b.get().hasWordmark() {
+            if !registers.b.get().hasWordmark {
                 registers.a.set(with: registers.b.get())
                 
                 // Set A-Addr-Reg
@@ -262,13 +262,13 @@ extension ProcessingUnit {
             dump("ADDR I-4: \(addr) : \(registers.addrI)")
             
             // Check for branch opcode
-            if (registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank() || registers.b.get().hasWordmark()) ) {
+            if (registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) ) {
                 // TODO: Implement branch instruction handling
                 return
             }
             
             // Check WM in B-Register
-            if registers.b.get().hasWordmark() {
+            if registers.b.get().hasWordmark {
                 // FIXME: Implement op code handling
                 #if DEBUG
                     dump("WORD MARK IS SET: \(registers.b.get())")
@@ -300,7 +300,7 @@ extension ProcessingUnit {
             #endif
             
             // Check B-Register for WM
-            if registers.b.get().hasWordmark() {
+            if registers.b.get().hasWordmark {
                 // FIXME: Check for specific OP code
                 // FIXME: Implement parity and validity checks...
                 
@@ -331,7 +331,7 @@ extension ProcessingUnit {
                 cyclePhase = .ePhase
             } else {
                 // Check B-Register for WM
-                if registers.b.get().hasWordmark() {
+                if registers.b.get().hasWordmark {
                     // FIXME: Implement op code handling
                     cyclePhase = .ePhase
                     return
@@ -360,7 +360,7 @@ extension ProcessingUnit {
         let addr = cycleIStart()
         dump("ADDR I-8: \(addr) : \(registers.addrI)")
         
-        if registers.b.get().hasWordmark() {
+        if registers.b.get().hasWordmark {
             // FIXME: Implement op code handling
             return
         }
@@ -383,7 +383,7 @@ extension ProcessingUnit {
     }
     
     private func executionNext() throws {
-        dump("E-PHASE: \(registers.i.get().char() ?? Character(""))")
+        dump("E-PHASE: \(registers.i.get().char ?? Character(""))")
         
         if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
             op_setWordmark()
@@ -412,7 +412,7 @@ extension ProcessingUnit {
         }
         
         else {
-            throw Exceptions.stopCondition("E-PHASE ERROR: INSRUCTION NOT IMPLEMENTED OR UNKNOWN: \(registers.i.get().char() ?? Character(""))")
+            throw Exceptions.stopCondition("E-PHASE ERROR: INSRUCTION NOT IMPLEMENTED OR UNKNOWN: \(registers.i.get().char ?? Character(""))")
         }
         
         stopExecutionPhase()
@@ -422,8 +422,8 @@ extension ProcessingUnit {
 
 // MARK: - Monitor
 extension ProcessingUnit {
-    func monitorData() -> MonitorData {
-        return MonitorData(
+    var monitorData: MonitorData {
+        MonitorData(
             registerA: registers.a.get(),
             registerB: registers.b.get(),
             registerI: registers.i.get(),
