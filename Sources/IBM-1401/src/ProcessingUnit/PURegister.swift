@@ -5,9 +5,9 @@
 //  Created by Martin Albrecht on 13.06.20.
 //
 
-class Register {
+class PURegister {
     var isValid: Bool {
-        validityCheck ? value.parityCheck && value.isValid : value.parityCheck
+        validityCheck ? value.parityCheck && value.valid : value.parityCheck
     }
 
     var isDecimal: Bool {
@@ -29,7 +29,8 @@ class Register {
         return value
     }
  
-    @discardableResult func set(with value: Word) -> Word {
+    @discardableResult
+    func set(with value: Word) -> Word {
         self.value = value
         self.needCheck = true
         return self.value

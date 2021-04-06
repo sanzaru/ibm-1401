@@ -5,7 +5,7 @@
 //  Created by Martin Albrecht on 01.06.20.
 //
 
-final class CoreStorage {
+final class PUCoreStorage {
     var count: Int {
         storage.count
     }
@@ -15,7 +15,7 @@ final class CoreStorage {
     }
 
     private let size: StorageSize
-    private var storage = [Word]()
+    private var storage = Address()
 
     enum StorageSize: Int {
         case k1 = 1400

@@ -23,10 +23,10 @@ struct MonitorData {
     var registerA: Word
     var registerB: Word
     var registerI: Word
-    var registerAddrA: [Word]
-    var registerAddrB: [Word]
-    var registerAddrI: [Word]
-    var registerAddrS: [Word]
+    var registerAddrA: Address
+    var registerAddrB: Address
+    var registerAddrI: Address
+    var registerAddrS: Address
     var instructionCounter: Int
 }
 
@@ -42,7 +42,7 @@ final class IBM1401 {
     private var lastCycles = 0
     private var running: Bool
     
-    init(storageSize: CoreStorage.StorageSize = .k1) {
+    init(storageSize: PUCoreStorage.StorageSize = .k1) {
         running = false
                 
         pu = ProcessingUnit(storageSize: storageSize)        
@@ -67,7 +67,7 @@ final class IBM1401 {
     }
     
     func load(code: String) -> Int {
-        let encoded = encode(ascii: code)
+        let encoded = code.uppercased().map { CharacterEncodings[$0]! }
         
         if encoded.count <= 80 {
             for i in 0..<encoded.count {
@@ -144,12 +144,5 @@ final class IBM1401 {
             cycles += 1
         }
 
-    }
-    
-    
-    // MARK: - Private
-    
-    private func encode(ascii: String) -> [Word] {
-        return ascii.uppercased().map { CharacterEncodings[$0]! }
     }
 }

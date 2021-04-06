@@ -22,8 +22,8 @@ extension Word {
     var bitCount: Int {
         var count = 0
 
-        for i in 0...7 {
-            if self >> i & 1 == 1 {
+        (0..<8).forEach {
+            if self >> $0 & 1 == 1 {
                 count += 1
             }
         }
@@ -31,10 +31,10 @@ extension Word {
         return count
     }
 
-    var isValid: Bool {
+    var valid: Bool {
         var check = false
-        CharacterEncodings.forEach { _, value in
-            if (self & 0b00111111) & (value & 0b00111111) == 0 {
+        CharacterEncodings.forEach {
+            if (self & 0b00111111) & ($1 & 0b00111111) == 0 {
                 check = true
                 return
             }
@@ -104,18 +104,19 @@ extension Word {
     }
 
     func isOpCode(code: Character) -> Bool {
-        if let c = CharacterEncodings[code] {
-            //dump("IS OP CODE: \((self & 0b00111111)) -> \((c & 0b00111111)) => \((self & 0b00111111) ^ (c & 0b00111111))")
-
-            // Drop WM and C bit from both sides
-            return (self & 0b00111111) ^ (c & 0b00111111) == 0
+        guard let c = CharacterEncodings[code] else {
+            return false
         }
-        
-        return false
+
+        //dump("IS OP CODE: \((self & 0b00111111)) -> \((c & 0b00111111)) => \((self & 0b00111111) ^ (c & 0b00111111))")
+
+        // Drop WM and C bit from both sides
+        return (self & 0b00111111) ^ (c & 0b00111111) == 0
     }
     
     // MARK: - Mutating
-    @discardableResult mutating func setWordMark() -> Word {
+    @discardableResult
+    mutating func setWordMark() -> Word {
         self |= 0b10000000
         
         if !parityCheck {
@@ -125,7 +126,8 @@ extension Word {
         return self
     }
     
-    @discardableResult mutating func setCheckBit() -> Word {
+    @discardableResult
+    mutating func setCheckBit() -> Word {
         self |= 0b01000000
         
         if !parityCheck {

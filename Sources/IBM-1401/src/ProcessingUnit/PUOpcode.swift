@@ -16,6 +16,7 @@ extension ProcessingUnit {
         case halt = "."
         case noop = "N"
         case load = "L"
+        case print = "2"
     }
 }
 
@@ -28,7 +29,7 @@ extension ProcessingUnit {
         registers.addrS = registers.addrA
         
         // Read storage to B-Reg
-        var addr = addrToInt(addrIn: registers.addrS)
+        var addr = registers.addrS.intValue()
         registers.b.set(with: coreStorage.get(from: addr))
         
         // Write back to storage
@@ -38,9 +39,9 @@ extension ProcessingUnit {
         registers.a.set(with: registers.b.get())
         
         // Decrease A-Addr-Reg
-        addr = addrToInt(addrIn: registers.addrA)
+        addr = registers.addrA.intValue()
         addr -= 1
-        registers.addrA = intToAddr(addrIn: addr)
+        registers.addrA = addr.addressValue
         
         // FIXME: Implement parity and validity checks...
     }
@@ -57,7 +58,7 @@ extension ProcessingUnit {
         func cycleB() {
             registers.addrS = registers.addrB
             
-            var addr = addrToInt(addrIn: registers.addrS, encoded: true)
+            var addr = registers.addrS.intValue(encoded: true)
             registers.b.set(with: coreStorage.get(from: addr))
             
             // Set word mark
@@ -65,9 +66,9 @@ extension ProcessingUnit {
             coreStorage.set(at: addr, with: registers.b.get())
             
             // Decrease B-Address-Register
-            addr = addrToInt(addrIn: registers.addrB)
+            addr = registers.addrB.intValue()
             addr -= 1
-            registers.addrB = intToAddr(addrIn: addr)
+            registers.addrB = addr.addressValue
             
             // FIXME: Implement parity and validity checks...
         }
@@ -76,7 +77,7 @@ extension ProcessingUnit {
         registers.addrS = registers.addrA
         
         // Read storage into B-Register
-        let addr = addrToInt(addrIn: registers.addrS, encoded: true)
+        let addr = registers.addrS.intValue(encoded: true)
         registers.b.set(with: coreStorage.get(from: addr))
         
         if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
@@ -88,9 +89,9 @@ extension ProcessingUnit {
             registers.a.set(with: registers.b.get())
             
             // Decrease A-Address-Register
-            var addr = addrToInt(addrIn: registers.addrA)
+            var addr = registers.addrA.intValue()
             addr -= 1
-            registers.addrA = intToAddr(addrIn: addr)
+            registers.addrA = addr.addressValue
             
             // FIXME: Implement parity and validity checks...
             
@@ -104,7 +105,7 @@ extension ProcessingUnit {
 /// NOTE: This instruction always skips the A-Cycle of the I-Operation
 extension ProcessingUnit {
     internal func op_clearStorage() throws {
-        var addr = addrToInt(addrIn: registers.addrB)
+        var addr = registers.addrB.intValue()
         
         // Calculate the address the instruction should end
         let end = Int(registers.addrB[0].decoded) * 100
@@ -117,15 +118,15 @@ extension ProcessingUnit {
             registers.addrS = registers.addrB
             
             // Read STAR to B-Reg
-            addr = addrToInt(addrIn: registers.addrS)
+            addr = registers.addrS.intValue()
             registers.b.set(with: coreStorage.get(from: addr))
             
             // Set C-Bit at addr
             coreStorage.setCheckBit(at: addr)
             
-            addr = addrToInt(addrIn: registers.addrB)
+            addr = registers.addrB.intValue()
             addr -= 1
-            registers.addrB = intToAddr(addrIn: addr)
+            registers.addrB = addr.addressValue
             
             // FIXME: Implement parity and validity checks...
         } while addr >= end
@@ -165,7 +166,7 @@ extension ProcessingUnit {
             registers.addrS = registers.addrB
             
             // Read storage to B-Reg
-            var addr = addrToInt(addrIn: registers.addrS)
+            var addr = registers.addrS.intValue()
             registers.b.set(with: coreStorage.get(from: addr))
             
             // Write A-Register to storage and
@@ -186,9 +187,9 @@ extension ProcessingUnit {
                 }
                 
                 // Decrease B-Addr-Reg
-                addr = addrToInt(addrIn: registers.addrB)
+                addr = registers.addrB.intValue()
                 addr -= 1
-                registers.addrB = intToAddr(addrIn: addr)
+                registers.addrB = addr.addressValue
                 
                 // FIXME: Implement parity and validity checks...
                 
@@ -196,9 +197,9 @@ extension ProcessingUnit {
                 end = true
             } else {
                 // Decrease B-Addr-Reg
-                addr = addrToInt(addrIn: registers.addrB)
+                addr = registers.addrB.intValue()
                 addr -= 1
-                registers.addrB = intToAddr(addrIn: addr)
+                registers.addrB = addr.addressValue
                 
                 // FIXME: Implement parity and validity checks...
             }
@@ -219,7 +220,7 @@ extension ProcessingUnit {
         registers.addrS = registers.addrB
         
         // Read storage into B-Reg
-        var addr = addrToInt(addrIn: registers.addrS)
+        var addr = registers.addrS.intValue()
         registers.b.set(with: coreStorage.get(from: addr))
         
         // Check op code
@@ -247,9 +248,9 @@ extension ProcessingUnit {
         coreStorage.set(at: addr, with: value)
         
         // Decrease B-Addr-Reg
-        addr = addrToInt(addrIn: registers.addrB)
+        addr = registers.addrB.intValue()
         addr -= 1
-        registers.addrB = intToAddr(addrIn: addr)
+        registers.addrB = addr.addressValue
         
         // FIXME: Implement parity and validity checks...
     }
@@ -271,16 +272,16 @@ extension ProcessingUnit {
             registers.addrS = registers.addrB
             
             // Read storage to B-Reg
-            var addr = addrToInt(addrIn: registers.addrS)
+            var addr = registers.addrS.intValue()
             registers.b.set(with: coreStorage.get(from: addr))
             
             // A-Reg char and WM to storage
             coreStorage.set(at: addr, with: registers.a.get() & 0b10111111)
             
             // Decrease B-Addr-Reg
-            addr = addrToInt(addrIn: registers.addrB)
+            addr = registers.addrB.intValue()
             addr -= 1
-            registers.addrB = intToAddr(addrIn: addr)
+            registers.addrB = addr.addressValue
             
             // FIXME: Implement parity and validity checks...
             
