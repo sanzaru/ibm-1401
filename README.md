@@ -1,6 +1,6 @@
-# IBM-1401 Emulator in Swift 
+# IBM 1401 Emulator in Swift 
 
-This project is some **early** and inclomplete version of an IBM-1401 emulator written in vanilla Swift without any external libraries. 
+This project is some **early** and inclomplete version of an IBM 1401 emulator written in vanilla Swift without any external libraries. 
 
 While studying the machine and finishing a simple hello world punch card code, it was hard for me to test my code as there are not many emulators for the machine. With the help of the amazing emulator of [https://rolffson.de](https://rolffson.de) I was finally able to punch and run my code virtually on his emulator. Unfortunately, the project is only availble for windows and so I descided to write my own emulator...
 
