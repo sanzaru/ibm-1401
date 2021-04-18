@@ -17,7 +17,7 @@ extension Address {
 }
 
 extension Address {
-    func intValue(encoded: Bool = false) -> Int {
+    var intValue: Int {
         var addr: Int = 0
 
         addr += Int(self[2].decoded)
@@ -56,13 +56,19 @@ extension Address {
         }
 
         let ret = Int(addr)
-        if encoded {
-            return ret > 0 ? ret - 1 : 0
-        }
 
         return ret
     }
 }
+
+
+extension Address {
+    var encoded: Int {
+        return intValue > 0 ? intValue - 1 : 0
+    }
+}
+
+
 
 extension Int {
     var addressValue: Address {

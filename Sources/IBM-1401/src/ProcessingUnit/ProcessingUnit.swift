@@ -62,7 +62,7 @@ extension ProcessingUnit {
 extension ProcessingUnit {
     /// Increase the intruction address, write it to I-Addr-Reg and set STAR to I-Addr-Reg
     private func increaseInstructionAddress() {
-        var addr = registers.addrS.intValue()
+        var addr = registers.addrS.intValue
         addr += 1
         registers.addrI = addr.addressValue
         
@@ -81,7 +81,7 @@ extension ProcessingUnit {
     ///
     /// - Returns: Addr read from the I-Addr-Reg
     private func cycleIStart() -> Int {
-        let addr = registers.addrI.intValue()
+        let addr = registers.addrI.intValue
         
         // Write address to STAR
         registers.addrS = registers.addrI
@@ -100,7 +100,7 @@ extension ProcessingUnit {
     private func instructionNext() throws {
         switch iPhaseCount {
         case 0:
-            let addr = registers.addrI.intValue()
+            let addr = registers.addrI.intValue
             dump("ADDR I-OP: \(addr) : \(registers.addrI)")
             dump("I-IO REG: \(iAddrRegBlocked ? "Blocked" : "Open")")
             

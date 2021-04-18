@@ -29,7 +29,7 @@ extension ProcessingUnit {
         registers.addrS = registers.addrA
         
         // Read storage to B-Reg
-        var addr = registers.addrS.intValue()
+        var addr = registers.addrS.intValue
         registers.b.set(with: coreStorage.get(from: addr))
         
         // Write back to storage
@@ -39,7 +39,7 @@ extension ProcessingUnit {
         registers.a.set(with: registers.b.get())
         
         // Decrease A-Addr-Reg
-        addr = registers.addrA.intValue()
+        addr = registers.addrA.intValue
         addr -= 1
         registers.addrA = addr.addressValue
         
@@ -58,7 +58,7 @@ extension ProcessingUnit {
         func cycleB() {
             registers.addrS = registers.addrB
             
-            var addr = registers.addrS.intValue(encoded: true)
+            var addr = registers.addrS.encoded
             registers.b.set(with: coreStorage.get(from: addr))
             
             // Set word mark
@@ -66,7 +66,7 @@ extension ProcessingUnit {
             coreStorage.set(at: addr, with: registers.b.get())
             
             // Decrease B-Address-Register
-            addr = registers.addrB.intValue()
+            addr = registers.addrB.intValue
             addr -= 1
             registers.addrB = addr.addressValue
             
@@ -77,7 +77,7 @@ extension ProcessingUnit {
         registers.addrS = registers.addrA
         
         // Read storage into B-Register
-        let addr = registers.addrS.intValue(encoded: true)
+        let addr = registers.addrS.encoded
         registers.b.set(with: coreStorage.get(from: addr))
         
         if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
@@ -89,7 +89,7 @@ extension ProcessingUnit {
             registers.a.set(with: registers.b.get())
             
             // Decrease A-Address-Register
-            var addr = registers.addrA.intValue()
+            var addr = registers.addrA.intValue
             addr -= 1
             registers.addrA = addr.addressValue
             
@@ -105,7 +105,7 @@ extension ProcessingUnit {
 /// NOTE: This instruction always skips the A-Cycle of the I-Operation
 extension ProcessingUnit {
     internal func op_clearStorage() throws {
-        var addr = registers.addrB.intValue()
+        var addr = registers.addrB.intValue
         
         // Calculate the address the instruction should end
         let end = Int(registers.addrB[0].decoded) * 100
@@ -118,13 +118,13 @@ extension ProcessingUnit {
             registers.addrS = registers.addrB
             
             // Read STAR to B-Reg
-            addr = registers.addrS.intValue()
+            addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
             
             // Set C-Bit at addr
             coreStorage.setCheckBit(at: addr)
             
-            addr = registers.addrB.intValue()
+            addr = registers.addrB.intValue
             addr -= 1
             registers.addrB = addr.addressValue
             
@@ -166,7 +166,7 @@ extension ProcessingUnit {
             registers.addrS = registers.addrB
             
             // Read storage to B-Reg
-            var addr = registers.addrS.intValue()
+            var addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
             
             // Write A-Register to storage and
@@ -187,7 +187,7 @@ extension ProcessingUnit {
                 }
                 
                 // Decrease B-Addr-Reg
-                addr = registers.addrB.intValue()
+                addr = registers.addrB.intValue
                 addr -= 1
                 registers.addrB = addr.addressValue
                 
@@ -197,7 +197,7 @@ extension ProcessingUnit {
                 end = true
             } else {
                 // Decrease B-Addr-Reg
-                addr = registers.addrB.intValue()
+                addr = registers.addrB.intValue
                 addr -= 1
                 registers.addrB = addr.addressValue
                 
@@ -220,7 +220,7 @@ extension ProcessingUnit {
         registers.addrS = registers.addrB
         
         // Read storage into B-Reg
-        var addr = registers.addrS.intValue()
+        var addr = registers.addrS.intValue
         registers.b.set(with: coreStorage.get(from: addr))
         
         // Check op code
@@ -248,7 +248,7 @@ extension ProcessingUnit {
         coreStorage.set(at: addr, with: value)
         
         // Decrease B-Addr-Reg
-        addr = registers.addrB.intValue()
+        addr = registers.addrB.intValue
         addr -= 1
         registers.addrB = addr.addressValue
         
@@ -272,14 +272,14 @@ extension ProcessingUnit {
             registers.addrS = registers.addrB
             
             // Read storage to B-Reg
-            var addr = registers.addrS.intValue()
+            var addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
             
             // A-Reg char and WM to storage
             coreStorage.set(at: addr, with: registers.a.get() & 0b10111111)
             
             // Decrease B-Addr-Reg
-            addr = registers.addrB.intValue()
+            addr = registers.addrB.intValue
             addr -= 1
             registers.addrB = addr.addressValue
             

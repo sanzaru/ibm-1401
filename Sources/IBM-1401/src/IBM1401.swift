@@ -88,17 +88,17 @@ final class IBM1401 {
             print(String(format: "%03d ", row), terminator: "")
         }
         
-        for i in 1...breakPoint {
-            if i == 1 {
-                print(String(format: "    %03d", i), terminator: " ")
+        (1...breakPoint).forEach {
+            if $0 == 1 {
+                print(String(format: "    %03d", $0), terminator: " ")
             } else {
-                print(String(format: "%03d", i), terminator: " ")
+                print(String(format: "%03d", $0), terminator: " ")
             }
         }
         print("")
-        
-        for i in 1...breakPoint {
-            if i == 1 {
+
+        (1...breakPoint).forEach {
+            if $0 == 1 {
                 print("    ====", terminator: "")
             } else {
                 print("====", terminator: "")
@@ -109,21 +109,21 @@ final class IBM1401 {
         var row = 0
         leading(index: 0)
         
-        for i in 0..<pu.coreStorage.count {
-            let v = String(format: "%03d", pu.coreStorage.get(from: i, setZero: false))
+        (0..<pu.coreStorage.count).forEach {
+            let v = String(format: "%03d", pu.coreStorage.get(from: $0, setZero: false))
             
-            if i > 0 && i % breakPoint == 0 {
+            if $0 > 0 && $0 % breakPoint == 0 {
                 print("")
                 row += 1
                 
-                if i > 0 && i % 100 == 0 {
+                if $0 > 0 && $0 % 100 == 0 {
                     print("")
                 }
                 
                 leading(index: (row*breakPoint))
             }
                         
-            print(v, terminator: i == pu.coreStorage.count-1 ? "" : ",")
+            print(v, terminator: $0 == pu.coreStorage.count-1 ? "" : ",")
         }
     }
     
