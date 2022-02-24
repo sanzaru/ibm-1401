@@ -25,14 +25,14 @@ class PURegister {
     }
     
     func get() -> Word {
-        self.needCheck = true
+        needCheck = true
         return value
     }
  
     @discardableResult
     func set(with value: Word) -> Word {
         self.value = value
-        self.needCheck = true
+        needCheck = true
         return self.value
     }
     

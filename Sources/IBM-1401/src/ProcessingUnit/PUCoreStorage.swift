@@ -10,10 +10,6 @@ final class PUCoreStorage {
         storage.count
     }
 
-    var storageSize: StorageSize {
-        return size
-    }
-
     private let size: StorageSize
     private var storage = Address()
 

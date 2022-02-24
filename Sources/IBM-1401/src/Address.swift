@@ -8,6 +8,7 @@
 import Foundation
 
 typealias Address = [Word]
+
 extension Address {
     struct ZonePrefix {
         static let zero = ["+", "/", "S", "T", "U", "V", "W", "X", "Y", "Z"]
