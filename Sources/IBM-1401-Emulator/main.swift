@@ -48,12 +48,12 @@ class IBM1401App {
                         print("Loading file: \(filename)")
                         let data = try Data(contentsOf: url)
                         if let code = String(data: data, encoding: .utf8) {
-                            loaded = ibm1401.load(code: code)
+                            loaded = try ibm1401.load(code: code)
                         }
                     }
                 } else {
                     print("DEFAULT SET")
-                    loaded = ibm1401.load(code: HelloWorld)
+                    loaded = try ibm1401.load(code: HelloWorld)
                 }
             } catch {
                 print(error.localizedDescription)

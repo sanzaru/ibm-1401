@@ -60,8 +60,8 @@ final class IBM1401 {
         }
     }
     
-    func load(code: String) -> Int {
-        let encoded = Lib1401.CharacterEncodings.shared.encode(code: code)
+    func load(code: String) throws -> Int {
+        let encoded = try Lib1401.CharacterEncodings.shared.encode(code: code)
 
         if encoded.count <= pu.coreStorage.count {
             for i in 0..<encoded.count {
