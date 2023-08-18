@@ -1,9 +1,4 @@
-//
-//  File.swift
-//  
-//
-//  Created by Martin Albrecht on 03.06.20.
-//
+import Lib1401
 
 /// Opcode definitions
 extension ProcessingUnit {
@@ -30,7 +25,7 @@ extension ProcessingUnit {
         
         // Read storage to B-Reg
         var addr = registers.addrS.intValue
-        registers.b.set(with: coreStorage.get(from: addr))
+        registers.b.set(with: coreStorage.get(from: addr, setZero: false))
         
         // Write back to storage
         coreStorage.set(at: addr, with: registers.b.get())
@@ -296,5 +291,24 @@ extension ProcessingUnit {
 extension ProcessingUnit {
     internal func op_noop() throws {
         return
+    }
+}
+
+
+extension ProcessingUnit {
+    func op_print() {
+        let filename = "print-out.txt"
+        let bytes = coreStorage.getPrintStorage()
+        if let message = Lib1401.CharacterEncodings.shared.decode(words: bytes) {
+            dump("PRINTER DATA: \(message.count) bytes")
+            dump("PRINTER OUT: \(message)")
+
+            do {
+                try "\(message)\n".write(toFile: "./\(filename)", atomically: false, encoding: .utf8)
+                dump("PRINTER WRITTEN: \(filename): \(message.count+1) bytes")
+            } catch {
+                dump("ERROR WRITING PRINT OUT: \(error.localizedDescription)")
+            }
+        }
     }
 }

@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Martin Albrecht on 07.04.21.
-//
-
 import Foundation
 
 typealias Address = [Word]

@@ -1,14 +1,9 @@
-//
-//  File.swift
-//  
-//
-//  Created by Martin Albrecht on 20.06.20.
-//
+import Lib1401
 
 typealias Word = UInt8
 extension Word {
     var isNegative: Bool {
-        (self & 0b00100000) == 0b00100000
+        self & 0b00100000 == 0b00100000
     }
 
     var isBlank: Bool {
@@ -33,7 +28,7 @@ extension Word {
 
     var valid: Bool {
         var check = false
-        CharacterEncodings.forEach {
+        Lib1401.CharacterEncodings.shared.simh.forEach {
             if (self & 0b00111111) & ($1 & 0b00111111) == 0 {
                 check = true
                 return
@@ -60,20 +55,12 @@ extension Word {
     }
 
     var char: Character? {
-        for (key, value) in CharacterEncodings {
-            if (self & 0b00111111) ^ (value & 0b00111111) == 0 {
-                return key
-            }
-        }
-
-        return nil
+        return Lib1401.CharacterEncodings.shared.simh.first(where: { (self & 0b01111111) ^ ($0.value & 0b01111111) == 0 })?.key
     }
 
     var decoded: Word {
-        for (key, value) in CharacterEncodings {
-            if value.dropWordmark == dropWordmark {
-                return Word(String(key)) ?? 0
-            }
+        if let item = Lib1401.CharacterEncodings.shared.simh.first(where: { $0.value.dropWordmark == dropWordmark }) {
+            return Word(String(item.key)) ?? 0
         }
 
         return 0
@@ -85,7 +72,7 @@ extension Word {
     }
 
     var encoded: Word {
-        for (key, value) in CharacterEncodings {
+        for (key, value) in Lib1401.CharacterEncodings.shared.simh {
             if String(key) == String(self) {
                 return hasWordmark ? value ^ 0b10000000 : value
             }
@@ -104,7 +91,7 @@ extension Word {
     }
 
     func isOpCode(code: Character) -> Bool {
-        guard let c = CharacterEncodings[code] else {
+        guard let c = Lib1401.CharacterEncodings.shared.simh[code] else {
             return false
         }
 
@@ -112,6 +99,7 @@ extension Word {
 
         // Drop WM and C bit from both sides
         return (self & 0b00111111) ^ (c & 0b00111111) == 0
+        //return (self & 0b01111111) ^ (c & 0b01111111) == 0
     }
     
     // MARK: - Mutating

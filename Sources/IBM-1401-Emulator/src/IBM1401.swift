@@ -1,16 +1,10 @@
-//
-//  File.swift
-//  
-//
-//  Created by Martin Albrecht on 25.05.20.
-//
-
 
 //
 // Bit positions are: WM | C | B | A | 8 | 4 | 2 | 1
 //
 
 import Foundation
+import Lib1401
 
 extension BinaryInteger {
     var digits: [Int] {
@@ -42,7 +36,7 @@ final class IBM1401 {
     private var lastCycles = 0
     private var running: Bool
     
-    init(storageSize: PUCoreStorage.StorageSize = .k1) {
+    init(storageSize: ProcessingUnit.CoreStorage.StorageSize = .k1) {
         running = false
                 
         pu = ProcessingUnit(storageSize: storageSize)        
@@ -67,9 +61,9 @@ final class IBM1401 {
     }
     
     func load(code: String) -> Int {
-        let encoded = code.uppercased().map { CharacterEncodings[$0]! }
-        
-        if encoded.count <= 80 {
+        let encoded = Lib1401.CharacterEncodings.shared.encode(code: code)
+
+        if encoded.count <= pu.coreStorage.count {
             for i in 0..<encoded.count {
                 pu.coreStorage.set(at: i, with: encoded[i])
             }
@@ -85,7 +79,7 @@ final class IBM1401 {
         let breakPoint = 20
         
         func leading(index: Int) {
-            print(String(format: "%03d ", row), terminator: "")
+            print(String(format: "%03d ", row*breakPoint+1), terminator: "")
         }
         
         (1...breakPoint).forEach {

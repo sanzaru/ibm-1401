@@ -4,9 +4,10 @@
 //
 //  Created by Martin Albrecht on 01.06.20.
 //
+import Lib1401
 
 class ProcessingUnit {
-    var coreStorage: PUCoreStorage
+    var coreStorage: CoreStorage
     var iPhaseCount: Int = 0
     
     internal enum CyclePhase {
@@ -25,9 +26,9 @@ class ProcessingUnit {
     }
     
     internal struct Registers {
-        var a: PURegister = PURegister()
-        var b: PURegister = PURegister()
-        var i: PURegister = PURegister()
+        var a = Register()
+        var b = Register()
+        var i = Register()
         var addrA: Address = [74, 74, 74] // 0, 0, 0 BCD encoded
         var addrB: Address = [74, 74, 74]
         var addrI: Address = [0, 0, 0]
@@ -41,8 +42,8 @@ class ProcessingUnit {
     private var ePhaseACycleEliminate: Bool = false
     private var instructionFromRegisterA: Bool = false
 
-    init(storageSize: PUCoreStorage.StorageSize = .k1) {
-        coreStorage = PUCoreStorage(size: storageSize)
+    init(storageSize: ProcessingUnit.CoreStorage.StorageSize = .k1) {
+        coreStorage = ProcessingUnit.CoreStorage(size: storageSize)
     }
 }
 
@@ -119,8 +120,8 @@ extension ProcessingUnit {
             coreStorage.set(at: addr, with: registers.b.get())
             
             // Fetch instruction from address, drop word mark and reverse C-Bit
-            registers.i.set(with: (registers.b.get() & 0b01111111) ^ 0b01000000)
-            
+            registers.i.set(with: (registers.b.get() & 0b01111111))
+
             dump("I-OP Instruction: \(registers.i):\(registers.i.get().char ?? Character(""))")
             
         case 1, 2:
@@ -201,7 +202,7 @@ extension ProcessingUnit {
             
             // Set B-Addr-Register to blanks
             (0..<registers.addrB.count).forEach {
-                registers.addrB[$0] = CharacterEncodings[" "]!
+                registers.addrB[$0] = Lib1401.CharacterEncodings.shared.simh[" "]!
             }
             
             registers.addrB[0] = registers.b.get()
@@ -323,7 +324,11 @@ extension ProcessingUnit {
         else if registers.i.get().isOpCode(code: Opcodes.halt.rawValue) {
             try op_halt()
         }
-        
+
+        else if registers.i.get().isOpCode(code: Opcodes.print.rawValue) {
+            op_print()
+        }
+
         else {
             throw Exceptions.stopCondition("E-PHASE ERROR: INSRUCTION NOT IMPLEMENTED OR UNKNOWN: \(registers.i.get().char ?? Character(""))")
         }

@@ -1,22 +1,21 @@
-// swift-tools-version:5.2
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version:5.8
 
 import PackageDescription
 
 let package = Package(
-    name: "IBM-1401",
+    name: "IBM-1401-Emulator",
+    products: [
+        .executable(name: "IBM-1401-Emulator", targets: ["IBM-1401-Emulator"])
+    ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
+        .package(name: "Lib1401", path: "../Lib1401")
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
-        .target(
-            name: "IBM-1401",
-            dependencies: []),
+        .executableTarget(
+            name: "IBM-1401-Emulator",
+            dependencies: ["Lib1401"]),
         .testTarget(
-            name: "IBM-1401Tests",
-            dependencies: ["IBM-1401"]),
+            name: "IBM-1401-EmulatorTests",
+            dependencies: ["IBM-1401-Emulator", "Lib1401"]),
     ]
 )

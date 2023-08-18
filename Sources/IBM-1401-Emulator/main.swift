@@ -1,8 +1,7 @@
 import Foundation
 
 // DEBUG hello world program
-//let HelloWorld = ",008015,201022,029036,043047,051055,062063,067/332/299M0772112.047HELLO WORLD"
-let HelloWorld = ",008015,201022,029036,043047,051055,062063,067/332/299L0772112.047HELLO WORLD"
+let HelloWorld = ",008015,201022,029036,043047,051055,062063,067/332/299M0772112.047HELLO WORLD"
 //let HelloWorld = ",008015.000"
 
 class IBM1401App {
@@ -22,7 +21,7 @@ class IBM1401App {
         print("\n=========== IBM 1401 emulator ===========")
 
         while !quit {
-            parseCommand(command: prompt)
+            parseCommand(from: prompt)
         }
     }
 
@@ -30,14 +29,37 @@ class IBM1401App {
         dump("STOP CONDITION CATCHED: \(message)")
     }
 
-    private func parseCommand(command: String) {
+    private func parseCommand(from: String) {
+        let arguments = from.split(separator: " ").map({ String($0) })
+        let command = arguments[0]
+
         switch command {
         case "quit", "q":
             quit = true
             print("Goodbye!")
 
         case "load", "l":
-            print("Loaded \(ibm1401.load(code: HelloWorld)) words")
+            var loaded = 0
+            do {
+                if arguments.count >= 2 {
+                    let filename = "file://" + arguments[1]
+
+                    if let url = URL(string: filename) {
+                        print("Loading file: \(filename)")
+                        let data = try Data(contentsOf: url)
+                        if let code = String(data: data, encoding: .utf8) {
+                            loaded = ibm1401.load(code: code)
+                        }
+                    }
+                } else {
+                    print("DEFAULT SET")
+                    loaded = ibm1401.load(code: HelloWorld)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+
+            print("Loaded \(loaded) words")
             //print("Loaded \(ibm1401.load(code: dummyProg)) words")
 
         case "dump", "d":
