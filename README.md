@@ -17,6 +17,23 @@ More information about the machine itself: [http://ibm-1401.info](http://ibm-140
 
 The code should run on any system that supports Swift 3.x. No external library or packages are required.
 
+## Features
+
+- [ ] Load arbitrary program from external file
+- [ ] Parity and validity checks for registers
+- [ ] Support all opcodes
+    - [x] Set Word Mark (,)
+    - [x] Clear Storage (/)
+    - [x] Move (M)
+    - [x] Move Digit (D)
+    - [x] Move Zone (Y)
+    - [x] Halt (.)
+    - [ ] Halt and branch (.)
+    - [x] No Operation (N)
+    - [x] No Operation (L)
+    - [ ] Print (2) - Partially implemented
+    
+
 ## Manual
 
 ### Emulator commands
@@ -29,17 +46,3 @@ The code should run on any system that supports Swift 3.x. No external library o
 | r | Run loaded program |
 | m | Monitor |
 | q | Quit emulator |
-
-
-### Implemented Opcodes
-
-| Operation | ASCII character |
-| ----------- | ------------------ |
-| Set Word Mark |  , |
-| Clear Storage |  / |
-| Move | M |
-| Move Digit | D |
-| Move Zone | Y |
-| Halt | . |
-| No Operation | N |
-| Load | L |
