@@ -8,14 +8,21 @@ let package = Package(
         .executable(name: "IBM-1401-Emulator", targets: ["IBM-1401-Emulator"])
     ],
     dependencies: [
-        .package(name: "Lib1401", path: "../Lib1401")
+        .package(url: "https://github.com/sanzaru/lib1401.git", branch: "master")
     ],
     targets: [
         .executableTarget(
             name: "IBM-1401-Emulator",
-            dependencies: ["Lib1401"]),
+            dependencies: [
+                .product(name: "Lib1401", package: "Lib1401"),
+            ]
+        ),
         .testTarget(
             name: "IBM-1401-EmulatorTests",
-            dependencies: ["IBM-1401-Emulator", "Lib1401"]),
+            dependencies: [
+                "IBM-1401-Emulator",
+                .product(name: "Lib1401", package: "Lib1401"),
+            ]
+        ),
     ]
 )
