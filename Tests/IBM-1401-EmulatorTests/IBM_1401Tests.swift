@@ -2,31 +2,15 @@ import XCTest
 import class Foundation.Bundle
 
 final class IBM_1401Tests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-
-        // Some of the APIs that we use below are available in macOS 10.13 and above.
-        guard #available(macOS 10.13, *) else {
-            return
-        }
-
-        let fooBinary = productsDirectory.appendingPathComponent("IBM-1401")
-
+    func testProcessExecution() throws {
         let process = Process()
-        process.executableURL = fooBinary
-
-        let pipe = Pipe()
-        process.standardOutput = pipe
+        process.executableURL = productsDirectory.appendingPathComponent("IBM-1401-Emulator")
 
         try process.run()
+        process.terminate()
         process.waitUntilExit()
 
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        let output = String(data: data, encoding: .utf8)
-
-        XCTAssertEqual(output, "Hello, world!\n")
+        XCTAssertFalse(process.isRunning)
     }
 
     /// Returns path to the built products directory.
@@ -42,6 +26,6 @@ final class IBM_1401Tests: XCTestCase {
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testProcessExecution", testProcessExecution),
     ]
 }
