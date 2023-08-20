@@ -12,34 +12,24 @@ extension BinaryInteger {
     }
 }
 
-
-struct MonitorData {
-    var registerA: Word
-    var registerB: Word
-    var registerI: Word
-    var registerAddrA: Address
-    var registerAddrB: Address
-    var registerAddrI: Address
-    var registerAddrS: Address
-    var instructionCounter: Int
-}
-
-
 final class IBM1401 {
     var monitorData: MonitorData {
         pu.monitorData
     }
 
     private let pu: ProcessingUnit
-    
+    private let cardReader: IBM1402
+
     private var cycles: Int = 0
     private var lastCycles = 0
     private var running: Bool
-    
+    private var cardStack: [String] = []
+
     init(storageSize: ProcessingUnit.CoreStorage.StorageSize = .k1) {
         running = false
                 
         pu = ProcessingUnit(storageSize: storageSize)        
+        cardReader = .init()
     }
     
     func CyclesPerSecond() {
@@ -59,19 +49,20 @@ final class IBM1401 {
             self.CyclesPerSecond()
         }
     }
-    
+
     func load(code: String) throws -> Int {
         let encoded = try Lib1401.CharacterEncodings.shared.encode(code: code)
 
-        if encoded.count <= pu.coreStorage.count {
-            for i in 0..<encoded.count {
-                pu.coreStorage.set(at: i, with: encoded[i])
-            }
-            
-            // Set word mark in first storage address
-            pu.coreStorage.setWordMark(at: 0)
+        let loadedCard = cardReader.load(from: encoded)
+
+        var index = 0
+        loadedCard.forEach { card in
+            pu.coreStorage.set(at: index, with: encoded[index])
+            index += 1
         }
-        
+
+        pu.coreStorage.setWordMark(at: 0)
+
         return encoded.count
     }
     
