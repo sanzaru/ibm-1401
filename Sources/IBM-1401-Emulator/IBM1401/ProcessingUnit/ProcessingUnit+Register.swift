@@ -1,9 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by Martin Albrecht on 13.06.20.
-//
 
 extension ProcessingUnit {
     struct Register {
