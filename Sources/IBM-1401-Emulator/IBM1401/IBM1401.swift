@@ -6,12 +6,6 @@
 import Foundation
 import Lib1401
 
-extension BinaryInteger {
-    var digits: [Int] {
-        return String(describing: self).compactMap { Int(String($0)) }
-    }
-}
-
 final class IBM1401 {
     var monitorData: MonitorData {
         pu.monitorData
