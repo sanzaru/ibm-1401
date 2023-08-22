@@ -4,8 +4,8 @@ import Foundation
 let HelloWorld = ",008015,201022,029036,043047,051055,062063,067/332/299M0772112.047HELLO WORLD"
 //let HelloWorld = ",008015.000"
 
-class IBM1401App {
-    static let shared = IBM1401App()
+struct IBM1401App {
+    static var shared = IBM1401App()
 
     private let ibm1401 = IBM1401(storageSize: .k1)
 
@@ -17,7 +17,7 @@ class IBM1401App {
         return cmd?.trimmingCharacters(in: .whitespacesAndNewlines).trimmingCharacters(in: .nonBaseCharacters) ?? ""
     }
 
-    func run() {
+    mutating func run() {
         print("\n=========== IBM 1401 emulator ===========")
 
         while !quit {
@@ -29,7 +29,7 @@ class IBM1401App {
         dump("STOP CONDITION CATCHED: \(message)")
     }
 
-    private func parseCommand(from: String) {
+    private mutating func parseCommand(from: String) {
         let arguments = from.split(separator: " ").map({ String($0) })
         let command = arguments[0]
 
