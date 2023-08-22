@@ -29,7 +29,7 @@ extension Word {
     var valid: Bool {
         var check = false
         Lib1401.CharacterEncodings.shared.simh.forEach {
-            if (self & 0b00111111) & ($1 & 0b00111111) == 0 {
+            if self & $1 == 0 {
                 check = true
                 return
             }
@@ -99,7 +99,6 @@ extension Word {
 
         // Drop WM and C bit from both sides
         return (self & 0b00111111) ^ (c & 0b00111111) == 0
-        //return (self & 0b01111111) ^ (c & 0b01111111) == 0
     }
     
     // MARK: - Mutating
