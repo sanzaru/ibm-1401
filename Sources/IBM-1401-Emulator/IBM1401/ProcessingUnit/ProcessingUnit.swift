@@ -1,4 +1,5 @@
 import Lib1401
+import Combine
 
 class ProcessingUnit {
     var coreStorage: CoreStorage
@@ -291,40 +292,42 @@ extension ProcessingUnit {
     }
 
     private func executionNext() throws {
-        dump("E-PHASE: \(registers.i.get().char ?? Character(""))")
+        let opcode = registers.i.get()
 
-        if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
+        dump("E-PHASE: \(opcode.char ?? Character(""))")
+
+        if opcode.isOpCode(code: Opcodes.setWordMark.rawValue) {
             op_setWordmark()
         }
 
-        else if registers.i.get().isOpCode(code: Opcodes.clearStorage.rawValue) {
+        else if opcode.isOpCode(code: Opcodes.clearStorage.rawValue) {
             try op_clearStorage()
             ePhaseACycleEliminate = false
             iAddrRegBlocked = false
         }
 
-        else if registers.i.get().isOpCode(code: Opcodes.move.rawValue) {
+        else if opcode.isOpCode(code: Opcodes.move.rawValue) {
             try op_move()
         }
 
-        else if registers.i.get().isOpCode(code: Opcodes.moveDigit.rawValue) || registers.i.get().isOpCode(code: Opcodes.moveZone.rawValue) {
+        else if opcode.isOpCode(code: Opcodes.moveDigit.rawValue) || opcode.isOpCode(code: Opcodes.moveZone.rawValue) {
             try op_move_digit_zone()
         }
 
-        else if registers.i.get().isOpCode(code: Opcodes.load.rawValue) {
+        else if opcode.isOpCode(code: Opcodes.load.rawValue) {
             try op_load()
         }
 
-        else if registers.i.get().isOpCode(code: Opcodes.halt.rawValue) {
+        else if opcode.isOpCode(code: Opcodes.halt.rawValue) {
             try op_halt()
         }
 
-        else if registers.i.get().isOpCode(code: Opcodes.print.rawValue) {
+        else if opcode.isOpCode(code: Opcodes.print.rawValue) {
             op_print()
         }
 
         else {
-            throw Exceptions.stopCondition("E-PHASE ERROR: INSRUCTION NOT IMPLEMENTED OR UNKNOWN: \(registers.i.get().char ?? Character(""))")
+            throw Exceptions.stopCondition("E-PHASE ERROR: INSRUCTION NOT IMPLEMENTED OR UNKNOWN: \(opcode.char ?? Character(""))")
         }
 
         stopExecutionPhase()
