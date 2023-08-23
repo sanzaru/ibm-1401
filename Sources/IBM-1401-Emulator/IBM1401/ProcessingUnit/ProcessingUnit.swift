@@ -53,7 +53,6 @@ extension ProcessingUnit {
     }
 }
 
-
 // MARK: - I-Phase
 extension ProcessingUnit {
     /// Increase the intruction address, write it to I-Addr-Reg and set STAR to I-Addr-Reg
@@ -97,8 +96,8 @@ extension ProcessingUnit {
         switch iPhaseCount {
         case 0:
             let addr = registers.addrI.intValue
-            dump("ADDR I-OP: \(addr) : \(registers.addrI)")
-            dump("I-IO REG: \(iAddrRegBlocked ? "Blocked" : "Open")")
+            Logger.debug("ADDR I-OP: \(addr) : \(registers.addrI)")
+            Logger.debug("I-IO REG: \(iAddrRegBlocked ? "Blocked" : "Open")")
 
             // Write address to STAR
             if iAddrRegBlocked {
@@ -117,11 +116,11 @@ extension ProcessingUnit {
             // Fetch instruction from address, drop word mark and reverse C-Bit
             registers.i.set(with: (registers.b.get() & 0b01111111))
 
-            dump("I-OP Instruction: \(registers.i):\(registers.i.get().char ?? Character(""))")
+            Logger.debug("I-OP Instruction: \(registers.i):\(registers.i.get().char ?? Character(""))")
 
         case 1, 2:
             let addr = cycleIStart()
-            dump("ADDR I-\(iPhaseCount == 1 ? "1" : "2"): \(addr) : \(registers.addrI)")
+            Logger.debug("ADDR I-\(iPhaseCount == 1 ? "1" : "2"): \(addr) : \(registers.addrI.encodedArray)")
 
             // Check for WM in B-Reg
             if !registers.b.get().hasWordmark {
@@ -152,7 +151,7 @@ extension ProcessingUnit {
 
         case 3:
             let addr = cycleIStart()
-            dump("ADDR I-3: \(addr) : \(registers.addrI)")
+            Logger.debug("ADDR I-3: \(addr) : \(registers.addrI.encodedArray)")
 
             registers.a.set(with: registers.b.get())
 
@@ -168,7 +167,7 @@ extension ProcessingUnit {
 
         case 4:
             let addr = cycleIStart()
-            dump("ADDR I-4: \(addr) : \(registers.addrI)")
+            Logger.debug("ADDR I-4: \(addr) : \(registers.addrI.encodedArray)")
 
             // Check for branch opcode
             if (registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) ) {
@@ -179,9 +178,7 @@ extension ProcessingUnit {
             // Check WM in B-Register
             if registers.b.get().hasWordmark {
                 // FIXME: Implement op code handling
-                #if DEBUG
-                    dump("WORD MARK IS SET: \(registers.b.get())")
-                #endif
+                Logger.debug("WORD MARK IS SET: \(registers.b.get())")
 
                 if registers.i.get().isOpCode(code: Opcodes.clearStorage.rawValue) {
                     ePhaseACycleEliminate = true
@@ -204,9 +201,7 @@ extension ProcessingUnit {
 
         case 5:
             let addr = cycleIStart()
-            #if DEBUG
-                dump("ADDR I-5: \(addr) : \(registers.addrI)")
-            #endif
+            Logger.debug("ADDR I-5: \(addr) : \(registers.addrI.encodedArray)")
 
             // Check B-Register for WM
             if registers.b.get().hasWordmark {
@@ -222,14 +217,14 @@ extension ProcessingUnit {
 
         case 6:
             let addr = cycleIStart()
-            dump("ADDR I-6: \(addr) : \(registers.addrI)")
+            Logger.debug("ADDR I-6: \(addr) : \(registers.addrI.encodedArray)")
 
             registers.a.set(with: registers.b.get())
             registers.addrB[2] = registers.b.get()
 
         case 7:
             let addr = cycleIStart()
-            dump("ADDR I-7: \(addr) : \(registers.addrI)")
+            Logger.debug("ADDR I-7: \(addr) : \(registers.addrI.encodedArray)")
 
             // Check for set word mark opcode
             if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
@@ -267,7 +262,7 @@ extension ProcessingUnit {
 
     private func cycleIOp8() {
         let addr = cycleIStart()
-        dump("ADDR I-8: \(addr) : \(registers.addrI)")
+        Logger.debug("ADDR I-8: \(addr) : \(registers.addrI.encodedArray)")
 
         if registers.b.get().hasWordmark {
             // FIXME: Implement op code handling
@@ -294,7 +289,7 @@ extension ProcessingUnit {
     private func executionNext() throws {
         let opcode = registers.i.get()
 
-        dump("E-PHASE: \(opcode.char ?? Character(""))")
+        Logger.debug("E-PHASE: \(opcode.char ?? Character(""))")
 
         if opcode.isOpCode(code: Opcodes.setWordMark.rawValue) {
             op_setWordmark()

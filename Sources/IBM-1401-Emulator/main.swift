@@ -45,25 +45,25 @@ struct IBM1401App {
                     let filename = "file://" + arguments[1]
 
                     if let url = URL(string: filename) {
-                        print("Loading file: \(filename)")
+                        Logger.info("Loading file: \(filename)")
                         let data = try Data(contentsOf: url)
                         if let code = String(data: data, encoding: .utf8) {
                             loaded = try ibm1401.load(code: code)
                         }
                     }
                 } else {
-                    print("DEFAULT SET")
+                    Logger.info("DEFAULT SET")
                     loaded = try ibm1401.load(code: HelloWorld)
                 }
             } catch {
-                print(error.localizedDescription)
+                Logger.error(error.localizedDescription)
             }
 
-            print("Loaded \(loaded) words")
+            Logger.info("Loaded \(loaded) words")
             //print("Loaded \(ibm1401.load(code: dummyProg)) words")
 
         case "dump", "d":
-            print("\nCore storage:")
+            Logger.info("\nCore storage:")
             ibm1401.dumpStorage()
 
         case "start", "s":
@@ -85,7 +85,7 @@ struct IBM1401App {
                     stopCondition(message: message)
                     quit = true
                 } catch ProcessingUnit.Exceptions.haltSystem {
-                    print("SYSTEM HALT")
+                    Logger.info("SYSTEM HALT")
                     quit = true
                 } catch {
                     quit = true

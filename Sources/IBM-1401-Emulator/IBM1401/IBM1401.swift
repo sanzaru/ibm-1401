@@ -30,11 +30,10 @@ final class IBM1401 {
         DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
             if self.running {
                 #if DEBUG
-                    let diff = self.cycles - self.lastCycles
-                    //print("\u{001B}[2J")
-                    print("CPS: \(diff)")
-                    print("\tShould:\t86957")
-                    print("\tDiff:\t\(diff - 86957) / Factor: \(diff / 86957)\n\n")
+                let diff = self.cycles - self.lastCycles
+                Logger.debug("CPS: \(diff)")
+                Logger.debug("\tShould:\t86957")
+                Logger.debug("\tDiff:\t\(diff - 86957) / Factor: \(diff / 86957)\n\n")
                 #endif
                 
                 self.lastCycles = self.cycles
@@ -111,9 +110,7 @@ final class IBM1401 {
     }
     
     func run() {
-        #if DEBUG
-            print("IBM 1401 running...")
-        #endif
+        Logger.debug("IBM 1401 running...")
         
         self.CyclesPerSecond()
         self.running.toggle()

@@ -60,6 +60,10 @@ extension Address {
     var encoded: Int {
         return intValue > 0 ? intValue - 1 : 0
     }
+
+    var encodedArray: [Int] {
+        return map({ $0.intValue })
+    }
 }
 
 

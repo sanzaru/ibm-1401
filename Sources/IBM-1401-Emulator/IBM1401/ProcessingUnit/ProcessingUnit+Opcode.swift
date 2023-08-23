@@ -76,8 +76,8 @@ extension ProcessingUnit {
         registers.b.set(with: coreStorage.get(from: addr))
         
         if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
-            dump("RUN SET WORD MARK: \(addr)")
-            
+            Logger.debug("RUN SET WORD MARK: \(addr)")
+
             // Set word mark
             registers.b.setWordMark()
             coreStorage.set(at: addr, with: registers.b.get())
@@ -105,8 +105,8 @@ extension ProcessingUnit {
         // Calculate the address the instruction should end
         let end = Int(registers.addrB[0].decoded) * 100
         
-        dump("RUNNING CLEAR STORAGE: \(registers.addrB) - From: \(addr) - \(end)...")
-        
+        Logger.debug("RUNNING CLEAR STORAGE: \(registers.addrB) - From: \(addr) - \(end)...")
+
         // Decrease B-Reg-Addr
         repeat {
             // B-Addr-Reg to STAR
@@ -167,7 +167,7 @@ extension ProcessingUnit {
             // Write A-Register to storage and
             coreStorage.set(at: addr, with: registers.a.get() & 0b01111111)
             
-            dump("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111)")
+            Logger.debug("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111)")
             
             // Check A- and B-Register for WM
             if registers.a.get().hasWordmark || registers.b.get().hasWordmark {
@@ -300,15 +300,17 @@ extension ProcessingUnit {
         let filename = "print-out.txt"
         let bytes = coreStorage.getPrintStorage()
         if let message = Lib1401.CharacterEncodings.shared.decode(words: bytes) {
-            dump("PRINTER DATA: \(message.count) bytes")
-            dump("PRINTER OUT: \(message)")
+            Logger.debug("PRINTER DATA: \(message.count) bytes")
+            Logger.info("PRINTER OUT: \(message)")
 
             do {
                 try "\(message)\n".write(toFile: "./\(filename)", atomically: false, encoding: .utf8)
-                dump("PRINTER WRITTEN: \(filename): \(message.count+1) bytes")
+                Logger.info("PRINTER WRITTEN: \(filename): \(message.count+1) bytes")
             } catch {
-                dump("ERROR WRITING PRINT OUT: \(error.localizedDescription)")
+                Logger.error("ERROR WRITING PRINT OUT: \(error.localizedDescription)")
             }
         }
     }
 }
+
+
