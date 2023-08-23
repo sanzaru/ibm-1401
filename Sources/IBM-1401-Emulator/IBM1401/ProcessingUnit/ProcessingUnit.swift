@@ -26,7 +26,7 @@ class ProcessingUnit {
         var i = Register()
         var addrA: Address = [74, 74, 74] // 0, 0, 0 BCD encoded
         var addrB: Address = [74, 74, 74]
-        var addrI: Address = [0, 0, 0]
+        var addrI: Address = [74, 74, 74]
         var addrS: Address = [74, 74, 74] // STAR
     }
 
