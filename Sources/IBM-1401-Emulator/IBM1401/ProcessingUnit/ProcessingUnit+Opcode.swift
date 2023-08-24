@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import Lib1401
+import Foundation
 
 /// Opcode definitions
 extension ProcessingUnit {
@@ -311,14 +312,20 @@ extension ProcessingUnit {
 
 extension ProcessingUnit {
     func op_print() {
-        let filename = "print-out.txt"
+        let filename = "printer.out.txt"
         let bytes = coreStorage.getPrintStorage()
         if let message = Lib1401.CharacterEncodings.shared.decode(words: bytes) {
             Logger.debug("PRINTER DATA: \(message.count) bytes")
             Logger.info("PRINTER OUT: \(message)")
 
             do {
-                try "\(message)\n".write(toFile: "./\(filename)", atomically: false, encoding: .utf8)
+                var body = ""
+                if let url = URL(string: "file://\(FileManager.default.currentDirectoryPath)/\(filename)"),
+                    let data = try? String(contentsOf: url) {
+                    body = data
+                }
+
+                try "\(body)\(message)\n".write(toFile: "./\(filename)", atomically: false, encoding: .utf8)
                 Logger.info("PRINTER WRITTEN: \(filename): \(message.count+1) bytes")
             } catch {
                 Logger.error("ERROR WRITING PRINT OUT: \(error.localizedDescription)")
@@ -326,5 +333,4 @@ extension ProcessingUnit {
         }
     }
 }
-
 
