@@ -181,7 +181,7 @@ extension ProcessingUnit {
             // Write A-Register to storage and
             coreStorage.set(at: addr, with: registers.a.get() & 0b01111111)
             
-            Logger.debug("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111)")
+            Logger.debug("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111) (\(registers.a.get().char ?? Character("")))")
             
             // Check A- and B-Register for WM
             if registers.a.get().hasWordmark || registers.b.get().hasWordmark {
