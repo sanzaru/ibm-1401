@@ -28,4 +28,8 @@ struct Logger {
     static func error(_ message: String) {
         print("[ERROR]: \(message.trimmingCharacters(in: .whitespacesAndNewlines))")
     }
+
+    static func fatal(_ message: String) {
+        fatalError("[FATAL]: \(message.trimmingCharacters(in: .whitespacesAndNewlines))")
+    }
 }
