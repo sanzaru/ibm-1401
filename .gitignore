@@ -96,5 +96,5 @@ fastlane/test_output
 iOSInjectionProject/
 
 .swiftpm
-print-out.txt
+printer.out.txt
 *.cd
