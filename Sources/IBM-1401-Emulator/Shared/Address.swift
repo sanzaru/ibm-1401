@@ -81,6 +81,18 @@ extension Address {
 }
 
 
+extension Address {
+    mutating func increase() {
+        let value = self.intValue - 1
+        self = value.addressValue
+    }
+
+    mutating func decrease() {
+        let value = self.intValue - 1
+        self = value.addressValue
+    }
+}
+
 
 extension Int {
     var addressValue: Address {

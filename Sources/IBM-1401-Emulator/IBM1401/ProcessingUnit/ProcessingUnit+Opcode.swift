@@ -40,7 +40,7 @@ extension ProcessingUnit {
         registers.addrS = registers.addrA
         
         // Read storage to B-Reg
-        var addr = registers.addrS.intValue
+        let addr = registers.addrS.intValue
         registers.b.set(with: coreStorage.get(from: addr, setZero: false))
         
         // Write back to storage
@@ -50,9 +50,7 @@ extension ProcessingUnit {
         registers.a.set(with: registers.b.get())
         
         // Decrease A-Addr-Reg
-        addr = registers.addrA.intValue
-        addr -= 1
-        registers.addrA = addr.addressValue
+        registers.addrA.decrease()
         
         // FIXME: Implement parity and validity checks...
     }
@@ -177,43 +175,26 @@ extension ProcessingUnit {
             registers.addrS = registers.addrB
             
             // Read storage to B-Reg
-            var addr = registers.addrS.intValue
+            let addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
-            
-            // Write A-Register to storage and
-            coreStorage.set(at: addr, with: registers.a.get() & 0b01111111)
-            
-            Logger.debug("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111) (\(registers.a.get().char ?? Character("")))")
-            
-            // Check A- and B-Register for WM
-            if registers.a.get().hasWordmark || registers.b.get().hasWordmark {
-                
-                // Send WM to core storage if needed
-                if registers.b.get().hasWordmark {
-                    var value = registers.a.get() | 0b10000000
-                    if !value.parityCheck {
-                        value.setCheckBit()
-                    }
-                    coreStorage.set(at: addr, with: value)
-                }
-                
-                // Decrease B-Addr-Reg
-                addr = registers.addrB.intValue
-                addr -= 1
-                registers.addrB = addr.addressValue
-                
-                // FIXME: Implement parity and validity checks...
-                
-                // End E-Phase
-                end = true
-            } else {
-                // Decrease B-Addr-Reg
-                addr = registers.addrB.intValue
-                addr -= 1
-                registers.addrB = addr.addressValue
-                
-                // FIXME: Implement parity and validity checks...
+
+            // B-Reg WM to storage if present
+            if registers.b.get().hasWordmark {
+                coreStorage.setWordMark(at: addr)
             }
+
+            // Decrease B-Addr-Reg
+            registers.addrB.decrease()
+
+            // Write A-Register to storage without wordmark
+            coreStorage.set(at: addr, with: registers.a.get() & 0b01111111)
+
+            Logger.debug("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111) (\(registers.a.get().char ?? Character("")))")
+
+            // Check A- and B-Register for WM and end E-Phase
+            // FIXME: Check bit to storage as required
+            // FIXME: Implement parity and validity checks...
+            end = registers.a.get().hasWordmark || registers.b.get().hasWordmark
         } while !end
     }
 }
