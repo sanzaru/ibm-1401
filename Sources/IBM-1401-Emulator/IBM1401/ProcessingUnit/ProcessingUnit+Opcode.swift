@@ -207,7 +207,7 @@ extension ProcessingUnit {
         registers.addrS = registers.addrB
         
         // Read storage into B-Reg
-        var addr = registers.addrS.intValue
+        let addr = registers.addrS.intValue
         registers.b.set(with: coreStorage.get(from: addr))
         
         // Check op code
@@ -257,7 +257,7 @@ extension ProcessingUnit {
             registers.addrS = registers.addrB
             
             // Read storage to B-Reg
-            var addr = registers.addrS.intValue
+            let addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
 
             // Decrease B-Addr-Reg
