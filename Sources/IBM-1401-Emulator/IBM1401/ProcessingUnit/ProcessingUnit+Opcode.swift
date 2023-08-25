@@ -285,14 +285,14 @@ extension ProcessingUnit {
             // Read storage to B-Reg
             var addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
-            
-            // A-Reg char and WM to storage
-            coreStorage.set(at: addr, with: registers.a.get() & 0b10111111)
-            
+
             // Decrease B-Addr-Reg
             addr = registers.addrB.intValue
             addr -= 1
             registers.addrB = addr.addressValue
+
+            // A-Reg char and WM to storage
+            coreStorage.set(at: addr, with: registers.a.get() & 0b10111111)
             
             // FIXME: Implement parity and validity checks...
             
