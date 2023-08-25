@@ -116,25 +116,19 @@ extension Word {
     }
     
     // MARK: - Mutating
-    @discardableResult
-    mutating func setWordMark() -> Word {
+    mutating func setWordMark() {
         self |= 0b10000000
         
         if !parityCheck {
             self ^= 0b01000000
         }
-        
-        return self
     }
-    
-    @discardableResult
-    mutating func setCheckBit() -> Word {
+
+    mutating func setCheckBit() {
         self |= 0b01000000
         
         if !parityCheck {
             self ^= 0b01000000
         }
-        
-        return self
     }    
 }
