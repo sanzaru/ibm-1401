@@ -19,7 +19,7 @@
 import Foundation
 
 final class IBM1401 {
-    var monitorData: MonitorData {
+    var monitorData: Monitor.Data {
         pu.monitorData
     }
 

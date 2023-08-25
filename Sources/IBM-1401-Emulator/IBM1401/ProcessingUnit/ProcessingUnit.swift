@@ -351,8 +351,8 @@ extension ProcessingUnit {
 
 // MARK: - Monitor
 extension ProcessingUnit {
-    var monitorData: MonitorData {
-        MonitorData(
+    var monitorData: Monitor.Data {
+        .init(
             registerA: registers.a.get(),
             registerB: registers.b.get(),
             registerI: registers.i.get(),

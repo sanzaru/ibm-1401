@@ -107,29 +107,7 @@ struct IBM1401App {
             }
 
         case "monitor", "m":
-            let data = ibm1401.monitorData
-
-            print("Monitor")
-            print("=========")
-
-            print("Intruction Length: \(data.instructionCounter)")
-            print("")
-
-            print("Registers:")
-            print("""
-                \tA: \(data.registerA) (\(data.registerA.binaryString))
-                \tB: \(data.registerB) (\(data.registerB.binaryString))
-                \tI: \(data.registerI) (\(data.registerI.binaryString))\n
-            """)
-            print("")
-
-            print("Address registers:")
-            print("""
-                \tA: \(data.registerAddrA)
-                \tB: \(data.registerAddrB)
-                \tI: \(data.registerAddrI)
-                \tS: \(data.registerAddrS)
-            """)
+            Monitor.dump(data: ibm1401.monitorData)
 
         case "reset", "rst":
             ibm1401.reset()
