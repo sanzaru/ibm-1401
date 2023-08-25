@@ -15,8 +15,9 @@
 import Foundation
 
 // DEBUG hello world program
-let HelloWorld = ",008015,201022,029036,043047,051055,062063,067/332/299M0772112.047HELLO WORLD"
-//let HelloWorld = ",008015.000"
+enum DefaultProgramCards: String {
+    case helloWorld = ",008015,201022,029036,043047,051055,062063,067/332/299M0772112.047HELLO WORLD"
+}
 
 struct IBM1401App {
     static var shared = IBM1401App()
@@ -40,7 +41,7 @@ struct IBM1401App {
     }
 
     private func stopCondition(message: String) {
-        dump("STOP CONDITION CATCHED: \(message)")
+        Logger.info("STOP CONDITION CATCHED: \(message)")
     }
 
     private mutating func parseCommand(from: String) {
@@ -53,7 +54,6 @@ struct IBM1401App {
             print("Goodbye!")
 
         case "load", "l":
-            var loaded = 0
             do {
                 if arguments.count >= 2 {
                     let filename = "file://" + arguments[1]
@@ -62,19 +62,16 @@ struct IBM1401App {
                         Logger.info("Loading file: \(filename)")
                         let data = try Data(contentsOf: url)
                         if let code = String(data: data, encoding: .utf8) {
-                            loaded = try ibm1401.load(code: code)
+                            try ibm1401.load(code: code)
                         }
                     }
                 } else {
                     Logger.info("DEFAULT SET")
-                    loaded = try ibm1401.load(code: HelloWorld)
+                    try ibm1401.load(code: DefaultProgramCards.helloWorld.rawValue)
                 }
             } catch {
                 Logger.error(error.localizedDescription)
             }
-
-            Logger.info("Loaded \(loaded) words")
-            //print("Loaded \(ibm1401.load(code: dummyProg)) words")
 
         case "dump", "d":
             Logger.info("\nCore storage:")
@@ -101,6 +98,8 @@ struct IBM1401App {
                 } catch ProcessingUnit.Exceptions.haltSystem {
                     Logger.info("SYSTEM HALT")
                     quit = true
+                } catch ProcessingUnit.Exceptions.readCard {
+                    ibm1401.readCard()
                 } catch {
                     quit = true
                     fatalError(error.localizedDescription)
@@ -132,9 +131,9 @@ struct IBM1401App {
                 \tS: \(data.registerAddrS)
             """)
 
-        /*case "run", "r":
-            print("Run...")
-            ibm1401.run()*/
+        case "reset", "rst":
+            ibm1401.reset()
+            Logger.info("System reset")
 
         default:
             print("Error: Unknown command \"\(command)\"")

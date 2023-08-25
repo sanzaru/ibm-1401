@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import Lib1401
-import Combine
 
 class ProcessingUnit {
     var coreStorage: CoreStorage
@@ -27,6 +26,7 @@ class ProcessingUnit {
         case parityCheckFail(count: Int, value: Word)
         case stopCondition(String)
         case haltSystem
+        case readCard
     }
 
     internal enum ExecutionMode {
@@ -333,6 +333,11 @@ extension ProcessingUnit {
 
         else if opcode.isOpCode(code: Opcodes.print.rawValue) {
             op_print()
+        }
+
+        else if opcode.isOpCode(code: Opcodes.readCard.rawValue) {
+            stopExecutionPhase()
+            throw Exceptions.readCard
         }
 
         else {

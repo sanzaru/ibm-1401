@@ -13,8 +13,11 @@
 // limitations under the License.
 
 import Foundation
+import Lib1401
 
 final class IBM1402 {
+    var count: Int { readStack.count }
+
     enum LineSize: Int {
         case normal = 80, stub = 51
     }
@@ -28,17 +31,17 @@ final class IBM1402 {
         self.linesize = linesize
     }
 
-    func load(from code: [UInt8]) -> [UInt8] {
-        readStack = code.chunked(into: linesize.rawValue).reversed()
+    func load(from string: String) throws -> [UInt8]? {
+        readStack = try string.split(separator: "\n").reversed().map { card in
+            try Lib1401.CharacterEncodings.shared.encode(code: String(card))
+        }
 
-        #if DEBUG
-        dump("Loaded \(readStack.count) cards")
-        #endif
+        Logger.debug("IBM-1402: Loaded \(readStack.count) \(readStack.count == 1 ? "card" : "cards")")
 
         return read()
     }
 
-    func read() -> [UInt8] {
-        readStack.popLast() ?? []
+    func read() -> [UInt8]? {
+        readStack.popLast()
     }
 }

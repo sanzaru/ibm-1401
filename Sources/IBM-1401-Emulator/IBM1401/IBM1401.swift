@@ -17,7 +17,6 @@
 //
 
 import Foundation
-import Lib1401
 
 final class IBM1401 {
     var monitorData: MonitorData {
@@ -25,53 +24,53 @@ final class IBM1401 {
     }
 
     private let pu: ProcessingUnit
-    private let cardReader: IBM1402
+    private let cardReader = IBM1402()
 
     private var cycles: Int = 0
     private var lastCycles = 0
     private var running: Bool
-    private var cardStack: [String] = []
 
     init(storageSize: ProcessingUnit.CoreStorage.StorageSize = .k1) {
         running = false
-                
-        pu = ProcessingUnit(storageSize: storageSize)        
-        cardReader = .init()
+
+        pu = ProcessingUnit(storageSize: storageSize)
     }
-    
-    func CyclesPerSecond() {
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
-            if self.running {
-                #if DEBUG
-                let diff = self.cycles - self.lastCycles
-                Logger.debug("CPS: \(diff)")
-                Logger.debug("\tShould:\t86957")
-                Logger.debug("\tDiff:\t\(diff - 86957) / Factor: \(diff / 86957)\n\n")
-                #endif
-                
-                self.lastCycles = self.cycles
-            }
-            
-            self.CyclesPerSecond()
+
+//    func cyclesPerSecond() {
+//        DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
+//            if self.running {
+//                #if DEBUG
+//                let diff = self.cycles - self.lastCycles
+//                Logger.debug("CPS: \(diff)")
+//                Logger.debug("\tShould:\t86957")
+//                Logger.debug("\tDiff:\t\(diff - 86957) / Factor: \(diff / 86957)\n\n")
+//                #endif
+//                
+//                self.lastCycles = self.cycles
+//            }
+//            
+//            self.cyclesPerSecond()
+//        }
+//    }
+
+    func load(code: String) throws {
+        if let loadedCard = try cardReader.load(from: code) {
+            load(bytes: loadedCard)
         }
     }
 
-    func load(code: String) throws -> Int {
-        let encoded = try Lib1401.CharacterEncodings.shared.encode(code: code)
-
-        let loadedCard = cardReader.load(from: encoded)
-
+    func load(bytes: [Word]) {
         var index = 0
-        loadedCard.forEach { card in
-            pu.coreStorage.set(at: index, with: encoded[index])
+        bytes.forEach { byte in
+            pu.coreStorage.set(at: index, with: byte)
             index += 1
         }
 
-        pu.coreStorage.setWordMark(at: 0)
+        Logger.debug("Loaded \(bytes.count) bytes")
 
-        return encoded.count
+        pu.coreStorage.setWordMark(at: 0)
     }
-    
+
     func dumpStorage() {
         let breakPoint = 20
         
@@ -121,17 +120,33 @@ final class IBM1401 {
     func start() throws {
         try pu.step()        
     }
-    
-    func run() {
-        Logger.debug("IBM 1401 running...")
-        
-        self.CyclesPerSecond()
-        self.running.toggle()
-        
-        while self.running {
-            //print("Ticks: \(ticks)")
-            cycles += 1
+
+    func readCard() {
+        guard let card = cardReader.read() else {
+            Logger.fatal("Cannot read card!")
+            return
         }
 
+        pu.registers = .init()
+        load(bytes: card)
+    }
+
+//    func run() {
+//        Logger.debug("IBM 1401 running...")
+//        
+//        self.CyclesPerSecond()
+//        self.running.toggle()
+//        
+//        while self.running {
+//            //print("Ticks: \(ticks)")
+//            cycles += 1
+//        }
+//
+//    }
+
+    func reset() {
+        pu.stopExecutionPhase()
+        pu.registers = .init()
+        pu.coreStorage.reset()
     }
 }

@@ -27,6 +27,7 @@ extension ProcessingUnit {
         case noop = "N"
         case load = "L"
         case print = "2"
+        case readCard = "1"
     }
 }
 

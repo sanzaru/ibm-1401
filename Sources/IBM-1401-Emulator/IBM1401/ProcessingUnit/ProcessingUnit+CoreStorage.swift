@@ -19,7 +19,7 @@ extension ProcessingUnit {
         }
 
         private let size: StorageSize
-        private var storage = Address()
+        private var storage = [Word]()
 
         enum StorageSize: Int {
             case k1 = 1400
@@ -75,6 +75,12 @@ extension ProcessingUnit {
         mutating func setCheckBit(at addr: Int) {
             if addr <= storage.count {
                 storage[addr].setCheckBit()
+            }
+        }
+
+        mutating func reset() {
+            for i in 0...(size.rawValue-1) {
+                self.storage[i] = 0b01000000
             }
         }
     }
