@@ -14,11 +14,6 @@
 
 import Foundation
 
-// DEBUG hello world program
-enum DefaultProgramCards: String {
-    case helloWorld = ",008015,201022,029036,043047,051055,062063,067/332/299M0772112.047HELLO WORLD"
-}
-
 struct IBM1401App {
     static var shared = IBM1401App()
 
