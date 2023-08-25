@@ -67,7 +67,7 @@ extension ProcessingUnit {
         func cycleB() {
             registers.addrS = registers.addrB
             
-            var addr = registers.addrS.encoded
+            let addr = registers.addrS.encoded
             registers.b.set(with: coreStorage.get(from: addr))
             
             // Set word mark
@@ -75,9 +75,7 @@ extension ProcessingUnit {
             coreStorage.set(at: addr, with: registers.b.get())
             
             // Decrease B-Address-Register
-            addr = registers.addrB.intValue
-            addr -= 1
-            registers.addrB = addr.addressValue
+            registers.addrB.decrease()
             
             // FIXME: Implement parity and validity checks...
         }
@@ -98,9 +96,7 @@ extension ProcessingUnit {
             registers.a.set(with: registers.b.get())
             
             // Decrease A-Address-Register
-            var addr = registers.addrA.intValue
-            addr -= 1
-            registers.addrA = addr.addressValue
+            registers.addrA.decrease()
             
             // FIXME: Implement parity and validity checks...
             
@@ -133,9 +129,8 @@ extension ProcessingUnit {
             // Set C-Bit at addr
             coreStorage.setCheckBit(at: addr)
             
-            addr = registers.addrB.intValue
-            addr -= 1
-            registers.addrB = addr.addressValue
+            // Decrease B-Address-Register
+            registers.addrB.decrease()
             
             // FIXME: Implement parity and validity checks...
         } while addr >= end
@@ -240,9 +235,7 @@ extension ProcessingUnit {
         coreStorage.set(at: addr, with: value)
         
         // Decrease B-Addr-Reg
-        addr = registers.addrB.intValue
-        addr -= 1
-        registers.addrB = addr.addressValue
+        registers.addrB.decrease()
         
         // FIXME: Implement parity and validity checks...
     }
@@ -268,9 +261,7 @@ extension ProcessingUnit {
             registers.b.set(with: coreStorage.get(from: addr))
 
             // Decrease B-Addr-Reg
-            addr = registers.addrB.intValue
-            addr -= 1
-            registers.addrB = addr.addressValue
+            registers.addrB.decrease()
 
             // A-Reg char and WM to storage
             coreStorage.set(at: addr, with: registers.a.get() & 0b10111111)
