@@ -126,14 +126,16 @@ extension ProcessingUnit {
             addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
             
-            // Set C-Bit at addr
-            coreStorage.setCheckBit(at: addr)
-            
+            // Set C-Bit at addr / clear storage
+            coreStorage.set(at: addr, with: 0b01000000)
+
             // Decrease B-Address-Register
             registers.addrB.decrease()
             
             // FIXME: Implement parity and validity checks...
         } while addr >= end
+
+        // FIXME: Implement ELOCK WRAP-AROUND CHECK
     }
 }
 
