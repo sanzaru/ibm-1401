@@ -147,7 +147,8 @@ extension ProcessingUnit {
 
                 // Check for specific OP-Code. If we don't have a special op code, we write the
                 // value from B-Register to the correct B-Addr-Reg position
-                if !registers.i.get().isOpCode(code: "L") && !registers.i.get().isOpCode(code: Opcodes.move.rawValue) &&
+                if !registers.i.get().isOpCode(code: Opcodes.load.rawValue) &&
+                    !registers.i.get().isOpCode(code: Opcodes.move.rawValue) &&
                     !registers.i.get().isOpCode(code: "Q") && !registers.i.get().isOpCode(code: "H") {
                     registers.addrB[iPhaseCount == 1 ? 0 : 1] = registers.b.get()
                 }
@@ -176,7 +177,8 @@ extension ProcessingUnit {
 
             // Check for specific OP-Code. If we don't have a special op code, we write the
             // value from B-Register to the correct B-Addr-Reg position
-            if !registers.i.get().isOpCode(code: "L") && !registers.i.get().isOpCode(code: Opcodes.move.rawValue) &&
+            if !registers.i.get().isOpCode(code: Opcodes.load.rawValue) &&
+                !registers.i.get().isOpCode(code: Opcodes.move.rawValue) &&
                 !registers.i.get().isOpCode(code: "Q") && !registers.i.get().isOpCode(code: "H") {
                 registers.addrB[2] = registers.b.get()
             }
