@@ -146,19 +146,17 @@ extension ProcessingUnit {
 /// Halt instruction
 extension ProcessingUnit {
     internal func op_halt() throws {
-        // Check OP code for decimal
-        if !registers.i.isDecimal {
-            // Determine if cycle phase is #4
-            iAddrRegBlocked = iPhaseCount == 4
-            
-            // FIXME: Implement parity and validity checks...
-            
-            // Stop current execution
-            throw(Exceptions.haltSystem)
+        if iPhaseCount == 4 {
+            iAddrRegBlocked = true
         }
-        
+
         // Eliminate e-phase
         stopExecutionPhase()
+
+        // FIXME: Reset process latch
+
+        // Stop current execution
+        throw(Exceptions.haltSystem)
     }
 }
 
