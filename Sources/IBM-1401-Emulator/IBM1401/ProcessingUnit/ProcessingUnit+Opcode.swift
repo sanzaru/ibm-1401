@@ -41,7 +41,7 @@ extension ProcessingUnit {
         
         // Read storage to B-Reg
         let addr = registers.addrS.intValue
-        registers.b.set(with: coreStorage.get(from: addr, setZero: false))
+        registers.b.set(with: coreStorage.get(from: addr))
         
         // Write back to storage
         coreStorage.set(at: addr, with: registers.b.get())
@@ -69,11 +69,14 @@ extension ProcessingUnit {
             
             let addr = registers.addrS.encoded
             registers.b.set(with: coreStorage.get(from: addr))
-            
-            // Set word mark
-            registers.b.setWordMark()
+
+            // B-Register to storage
             coreStorage.set(at: addr, with: registers.b.get())
-            
+
+            // Set word mark
+            coreStorage.setWordMark(at: addr)
+            Logger.debug("RUN SET WORD MARK: \(addr)")
+
             // Decrease B-Address-Register
             registers.addrB.decrease()
             
@@ -86,22 +89,23 @@ extension ProcessingUnit {
         // Read storage into B-Register
         let addr = registers.addrS.encoded
         registers.b.set(with: coreStorage.get(from: addr))
-        
-        if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
-            Logger.debug("RUN SET WORD MARK: \(addr)")
 
-            // Set word mark
-            registers.b.setWordMark()
-            coreStorage.set(at: addr, with: registers.b.get())
-            registers.a.set(with: registers.b.get())
-            
-            // Decrease A-Address-Register
-            registers.addrA.decrease()
-            
-            // FIXME: Implement parity and validity checks...
-            
-            cycleB()
-        }
+        // B-Register to A-Register
+        registers.a.set(with: registers.b.get())
+
+        // B-Register to storage
+        coreStorage.set(at: addr, with: registers.b.get())
+
+        // Set word mark
+        coreStorage.setWordMark(at: addr)
+        Logger.debug("RUN SET WORD MARK: \(addr)")
+
+        // Decrease A-Address-Register
+        registers.addrA.decrease()
+
+        // FIXME: Implement parity and validity checks...
+
+        cycleB()
     }
 }
 
