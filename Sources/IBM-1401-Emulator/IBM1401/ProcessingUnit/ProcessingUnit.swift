@@ -110,7 +110,7 @@ extension ProcessingUnit {
         switch iPhaseCount {
         case 0:
             let addr = registers.addrI.intValue
-            Logger.debug("ADDR I-OP: \(addr) : \(registers.addrI)")
+            Logger.debug("ADDR I-OP: \(addr) : \(registers.addrI) [\(coreStorage.get(from: addr, setZero: false).char ?? Character(""))]")
             Logger.debug("I-IO REG: \(iAddrRegBlocked ? "Blocked" : "Open")")
 
             // Write address to STAR
@@ -131,10 +131,12 @@ extension ProcessingUnit {
             registers.i.set(with: (registers.b.get() & 0b01111111))
 
             Logger.debug("I-OP Instruction: \(registers.i):\(registers.i.get().char ?? Character(""))")
+            Logger.debug("IO WM: \(registers.b.get().hasWordmark ? "YES" : "NO")")
 
         case 1, 2:
             let addr = cycleIStart()
-            Logger.debug("ADDR I-\(iPhaseCount == 1 ? "1" : "2"): \(addr) : \(registers.addrI.encodedArray)")
+            Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
+            Logger.debug("IO WM: \(registers.b.get().hasWordmark ? "YES" : "NO")")
 
             // Check for WM in B-Reg
             if !registers.b.get().hasWordmark {
@@ -165,7 +167,7 @@ extension ProcessingUnit {
 
         case 3:
             let addr = cycleIStart()
-            Logger.debug("ADDR I-3: \(addr) : \(registers.addrI.encodedArray)")
+            Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
 
             registers.a.set(with: registers.b.get())
 
@@ -181,7 +183,8 @@ extension ProcessingUnit {
 
         case 4:
             let addr = cycleIStart()
-            Logger.debug("ADDR I-4: \(addr) : \(registers.addrI.encodedArray)")
+            Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
+            Logger.debug("IO WM: \(registers.b.get().hasWordmark ? "YES" : "NO")")
 
             // Check for branch opcode
             if (registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) ) {
@@ -215,7 +218,7 @@ extension ProcessingUnit {
 
         case 5:
             let addr = cycleIStart()
-            Logger.debug("ADDR I-5: \(addr) : \(registers.addrI.encodedArray)")
+            Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
 
             // Check B-Register for WM
             if registers.b.get().hasWordmark {
@@ -231,16 +234,13 @@ extension ProcessingUnit {
 
         case 6:
             let addr = cycleIStart()
-            Logger.debug("ADDR I-6: \(addr) : \(registers.addrI.encodedArray)")
+            Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
 
             registers.a.set(with: registers.b.get())
             registers.addrB[2] = registers.b.get()
 
         case 7:
-            let addr = cycleIStart()
-            Logger.debug("ADDR I-7: \(addr) : \(registers.addrI.encodedArray)")
-
-            // Check for set word mark opcode
+            // Check for set / clear word mark opcode
             if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
                 cyclePhase = .ePhase
             } else if registers.i.get().isOpCode(code: Opcodes.clearStorage.rawValue) {
@@ -248,6 +248,9 @@ extension ProcessingUnit {
                 ePhaseACycleEliminate = true
                 cyclePhase = .ePhase
             } else {
+                let addr = cycleIStart()
+                Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
+
                 // Check B-Register for WM
                 if registers.b.get().hasWordmark {
                     // FIXME: Implement op code handling
@@ -276,7 +279,7 @@ extension ProcessingUnit {
 
     private func cycleIOp8() {
         let addr = cycleIStart()
-        Logger.debug("ADDR I-8: \(addr) : \(registers.addrI.encodedArray)")
+        Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
 
         if registers.b.get().hasWordmark {
             // FIXME: Implement op code handling
@@ -296,6 +299,7 @@ extension ProcessingUnit {
 // MARK: - E-Phase
 extension ProcessingUnit {
     internal func stopExecutionPhase() {
+        Logger.debug("STOP EXECUTION PHASE")
         iPhaseCount = 0
         cyclePhase = .iPhase
     }
