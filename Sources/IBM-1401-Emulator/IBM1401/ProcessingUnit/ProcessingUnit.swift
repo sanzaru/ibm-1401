@@ -333,6 +333,10 @@ extension ProcessingUnit {
             try op_load()
         }
 
+        else if opcode.isOpCode(code: Opcodes.noop.rawValue) {
+            try op_noop()
+        }
+
         else if opcode.isOpCode(code: Opcodes.halt.rawValue) {
             try op_halt()
         }

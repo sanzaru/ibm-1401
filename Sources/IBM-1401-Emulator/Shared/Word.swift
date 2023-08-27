@@ -112,7 +112,7 @@ extension Word {
         // Drop WM and C bit from both sides
         return (self & 0b00111111) ^ (c & 0b00111111) == 0
     }
-    
+
     // MARK: - Mutating
     mutating func setWordMark() {
         self |= 0b10000000
