@@ -48,7 +48,6 @@ class ProcessingUnit {
     internal var registers = Registers()
     internal var iAddrRegBlocked: Bool = false
 
-    private var ePhaseACycleEliminate: Bool = false
     private var instructionFromRegisterA: Bool = false
 
     init(storageSize: ProcessingUnit.CoreStorage.StorageSize = .k1) {
@@ -159,6 +158,7 @@ extension ProcessingUnit {
                     stopExecutionPhase()
 
                     // FIXME: Implement parity and validity checks...
+                    return
                 } else {
                     // FIXME: Implement parity and validity checks...
 
@@ -199,8 +199,12 @@ extension ProcessingUnit {
                 // FIXME: Implement op code handling
                 Logger.debug("WORD MARK IS SET: \(registers.b.get())")
 
-                if registers.i.get().isOpCode(code: Opcodes.clearStorage.rawValue) {
-                    ePhaseACycleEliminate = true
+
+                if registers.i.get().isOpCode(code: Opcodes.noop.rawValue) {
+                    stopExecutionPhase()
+
+                    // FIXME: Implement parity and validity checks...
+                    return
                 }
 
                 // FIXME: Implement parity and validity checks...
@@ -227,6 +231,13 @@ extension ProcessingUnit {
                 // FIXME: Check for specific OP code
                 // FIXME: Implement parity and validity checks...
 
+                if registers.i.get().isOpCode(code: Opcodes.noop.rawValue) {
+                    stopExecutionPhase()
+
+                    // FIXME: Implement parity and validity checks...
+                    return
+                }
+
                 cyclePhase = .ePhase
                 return
             }
@@ -247,8 +258,13 @@ extension ProcessingUnit {
                 cyclePhase = .ePhase
             } else if registers.i.get().isOpCode(code: Opcodes.clearStorage.rawValue) {
                 iAddrRegBlocked = true
-                ePhaseACycleEliminate = true
                 cyclePhase = .ePhase
+                return
+            } else if registers.i.get().isOpCode(code: Opcodes.noop.rawValue) {
+                stopExecutionPhase()
+
+                // FIXME: Implement parity and validity checks...
+                return
             } else {
                 let addr = cycleIStart()
                 Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
@@ -285,6 +301,14 @@ extension ProcessingUnit {
 
         if registers.b.get().hasWordmark {
             // FIXME: Implement op code handling
+
+            if registers.i.get().isOpCode(code: Opcodes.noop.rawValue) {
+                stopExecutionPhase()
+
+                // FIXME: Implement parity and validity checks...
+                return
+            }
+
             return
         }
 
@@ -317,8 +341,6 @@ extension ProcessingUnit {
 
         else if opcode.isOpCode(code: Opcodes.clearStorage.rawValue) {
             try op_clearStorage()
-            ePhaseACycleEliminate = false
-            iAddrRegBlocked = false
         }
 
         else if opcode.isOpCode(code: Opcodes.move.rawValue) {
