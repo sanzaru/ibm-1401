@@ -253,31 +253,31 @@ extension ProcessingUnit {
             registers.addrB[2] = registers.b.get()
 
         case 7:
-            // Check for set / clear word mark opcode
-            if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
-                cyclePhase = .ePhase
-            } else if registers.i.get().isOpCode(code: Opcodes.clearStorage.rawValue) {
-                iAddrRegBlocked = true
-                cyclePhase = .ePhase
-                return
-            } else if registers.i.get().isOpCode(code: Opcodes.noop.rawValue) {
-                stopExecutionPhase()
-
-                // FIXME: Implement parity and validity checks...
-                return
-            } else {
-                let addr = cycleIStart()
-                Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
-
-                // Check B-Register for WM
-                if registers.b.get().hasWordmark {
-                    // FIXME: Implement op code handling
+            let addr = cycleIStart()
+            Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
+	
+            // Check B-Register for WM
+            if registers.b.get().hasWordmark {
+                // Check for specific OP code
+                if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
                     cyclePhase = .ePhase
+                } else if registers.i.get().isOpCode(code: Opcodes.clearStorage.rawValue) {
+                    iAddrRegBlocked = true
+                    cyclePhase = .ePhase
+                    return
+                } else if registers.i.get().isOpCode(code: Opcodes.noop.rawValue) {
+                    stopExecutionPhase()
+
+                    // FIXME: Implement parity and validity checks...
                     return
                 }
 
-                registers.a.set(with: registers.b.get())
+                // FIXME: Implement op code handling
+                cyclePhase = .ePhase
+                return
             }
+
+            registers.a.set(with: registers.b.get())
 
         case 8:
             cycleIOp8()
@@ -309,6 +309,7 @@ extension ProcessingUnit {
                 return
             }
 
+            stopExecutionPhase()
             return
         }
 
@@ -318,6 +319,8 @@ extension ProcessingUnit {
         increaseInstructionAddress()
 
         cycleIOp8()
+
+        // FIXME: Set error condition
     }
 }
 
@@ -365,6 +368,10 @@ extension ProcessingUnit {
 
         else if opcode.isOpCode(code: Opcodes.print.rawValue) {
             op_print()
+        }
+
+        else if opcode.isOpCode(code: Opcodes.compare.rawValue) {
+            op_compare()
         }
 
         else if opcode.isOpCode(code: Opcodes.readCard.rawValue) {
