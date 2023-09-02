@@ -252,24 +252,27 @@ extension ProcessingUnit {
             registers.a.set(with: registers.b.get())
             registers.addrB[2] = registers.b.get()
 
+            registers.addrI.increase()
+
         case 7:
             let addr = cycleIStart()
             Logger.debug("ADDR I-\(iPhaseCount): \(addr) : \(registers.addrI.encodedArray)")
-	
+
+            // Check for opcode set word mark
+            if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
+                cyclePhase = .ePhase
+                Logger.debug("EDING I-CYCLE FOR SET-WM")
+                return
+            }
+
             // Check B-Register for WM
             if registers.b.get().hasWordmark {
                 // Check for specific OP code
-                if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
-                    cyclePhase = .ePhase
-                } else if registers.i.get().isOpCode(code: Opcodes.clearStorage.rawValue) {
+                if registers.i.get().isOpCode(code: Opcodes.clearStorage.rawValue) {
                     iAddrRegBlocked = true
-                    cyclePhase = .ePhase
-                    return
                 } else if registers.i.get().isOpCode(code: Opcodes.noop.rawValue) {
                     stopExecutionPhase()
-
                     // FIXME: Implement parity and validity checks...
-                    return
                 }
 
                 // FIXME: Implement op code handling
@@ -284,12 +287,14 @@ extension ProcessingUnit {
             return
 
         default:
-            return
+            fatalError("ERROR: Unknown I-Cycle count: \(iPhaseCount)")
         }
 
         // Increase intruction address and write it to I-Addr-Reg
         if cyclePhase == .iPhase {
+            Logger.debug("I-CYCLE END")
             increaseInstructionAddress()
+
             // FIXME: Implement parity and validity checks...
             iPhaseCount += 1
         }
@@ -309,7 +314,7 @@ extension ProcessingUnit {
                 return
             }
 
-            stopExecutionPhase()
+            cyclePhase = .ePhase
             return
         }
 

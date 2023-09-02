@@ -62,7 +62,7 @@ extension ProcessingUnit {
 
         mutating func set(at addr: Int, with value: Word) {
             if addr <= storage.count {
-                storage[addr] = storage[addr].hasWordmark ? value | 0b10000000 : value
+                storage[addr] = value
             }
         }
 

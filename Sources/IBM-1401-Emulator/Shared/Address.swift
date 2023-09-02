@@ -83,7 +83,7 @@ extension Address {
 
 extension Address {
     mutating func increase() {
-        let value = self.intValue - 1
+        let value = self.intValue + 1
         self = value.addressValue
     }
 
