@@ -269,7 +269,7 @@ extension ProcessingUnit {
 
             // A-Reg char and WM to storage
             coreStorage.set(at: addr, with: registers.a.get() & 0b10111111)
-            
+
             // FIXME: Implement parity and validity checks...
             
             // Check for WM in A-Reg

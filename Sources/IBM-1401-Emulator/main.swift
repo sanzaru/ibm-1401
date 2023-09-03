@@ -77,6 +77,8 @@ struct IBM1401App {
                 try ibm1401.start()
             } catch ProcessingUnit.Exceptions.stopCondition(let message) {
                 stopCondition(message: message)
+            } catch ProcessingUnit.Exceptions.haltSystem {
+                Logger.info("SYSTEM HALT")
             } catch {
                 fatalError(error.localizedDescription)
             }
