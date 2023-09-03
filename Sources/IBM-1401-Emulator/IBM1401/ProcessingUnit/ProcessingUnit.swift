@@ -375,9 +375,9 @@ extension ProcessingUnit {
             op_print()
         }
 
-        else if opcode.isOpCode(code: Opcodes.compare.rawValue) {
-            op_compare()
-        }
+//        else if opcode.isOpCode(code: Opcodes.compare.rawValue) {
+//            op_compare()
+//        }
 
         else if opcode.isOpCode(code: Opcodes.readCard.rawValue) {
             stopExecutionPhase()
