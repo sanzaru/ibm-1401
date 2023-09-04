@@ -72,6 +72,12 @@ extension ProcessingUnit {
             }
         }
 
+        mutating func clearWordMark(at addr: Int) {
+            if addr <= storage.count {
+                storage[addr] &= 0b01111111
+            }
+        }
+
         mutating func setCheckBit(at addr: Int) {
             if addr <= storage.count {
                 storage[addr].setCheckBit()

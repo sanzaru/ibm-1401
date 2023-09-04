@@ -19,6 +19,7 @@ import Foundation
 extension ProcessingUnit {
     internal enum Opcodes: Character {
         case setWordMark = ","
+        case clearWordMark = ")"
         case clearStorage = "/"
         case move = "M"
         case moveDigit = "D"
@@ -60,9 +61,9 @@ extension ProcessingUnit {
 // MARK: - Instructions
 
 
-/// Set word mark instuction
+/// Set / clear word mark instuction
 extension ProcessingUnit {
-    internal func op_setWordmark() {
+    private func op_modifyWordmark(_ setWordmark: Bool = true) {
         // B-Cycle
         func cycleB() {
             registers.addrS = registers.addrB
@@ -73,9 +74,14 @@ extension ProcessingUnit {
             // B-Register to storage
             coreStorage.set(at: addr, with: registers.b.get())
 
-            // Set word mark
-            coreStorage.setWordMark(at: addr)
-            Logger.debug("RUN SET WORD MARK: \(addr)")
+            if setWordmark {
+                // Set word mark
+                coreStorage.setWordMark(at: addr)
+                Logger.debug("RUN SET WORD MARK: \(addr)")
+            } else {
+                coreStorage.clearWordMark(at: addr)
+                Logger.debug("RUN CLEAR WORD MARK: \(addr)")
+            }
 
             // Decrease B-Address-Register
             registers.addrB.decrease()
@@ -96,9 +102,14 @@ extension ProcessingUnit {
         // B-Register to storage
         coreStorage.set(at: addr, with: registers.b.get())
 
-        // Set word mark
-        coreStorage.setWordMark(at: addr)
-        Logger.debug("RUN SET WORD MARK: \(addr)")
+        if setWordmark {
+            // Set word mark
+            coreStorage.setWordMark(at: addr)
+            Logger.debug("RUN SET WORD MARK: \(addr)")
+        } else {
+            coreStorage.clearWordMark(at: addr)
+            Logger.debug("RUN CLEAR WORD MARK: \(addr)")
+        }
 
         // Decrease A-Address-Register
         registers.addrA.decrease()
@@ -106,6 +117,14 @@ extension ProcessingUnit {
         // FIXME: Implement parity and validity checks...
 
         cycleB()
+    }
+
+    func op_setWordMark() {
+        op_modifyWordmark(true)
+    }
+
+    func op_clearWordMark() {
+        op_modifyWordmark(false)
     }
 }
 

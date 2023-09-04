@@ -344,7 +344,11 @@ extension ProcessingUnit {
         Logger.debug("E-PHASE: \(opcode.char ?? Character(""))")
 
         if opcode.isOpCode(code: Opcodes.setWordMark.rawValue) {
-            op_setWordmark()
+            op_setWordMark()
+        }
+
+        else if opcode.isOpCode(code: Opcodes.clearWordMark.rawValue) {
+            op_clearWordMark()
         }
 
         else if opcode.isOpCode(code: Opcodes.clearStorage.rawValue) {
