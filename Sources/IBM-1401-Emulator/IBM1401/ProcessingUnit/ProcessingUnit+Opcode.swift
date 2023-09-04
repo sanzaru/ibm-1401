@@ -132,7 +132,7 @@ extension ProcessingUnit {
 /// Clear storage instruction
 /// NOTE: This instruction always skips the A-Cycle of the I-Operation
 extension ProcessingUnit {
-    internal func op_clearStorage() throws {
+    func op_clearStorage() throws {
         var addr = registers.addrB.intValue
         
         // Calculate the address the instruction should end
@@ -164,7 +164,7 @@ extension ProcessingUnit {
 
 /// Halt instruction
 extension ProcessingUnit {
-    internal func op_halt() throws {
+    func op_halt() throws {
         if iPhaseCount == 4 {
             iAddrRegBlocked = true
         }
@@ -181,7 +181,7 @@ extension ProcessingUnit {
 
 /// Move instruction
 extension ProcessingUnit {
-    internal func op_move() throws {
+    func op_move() throws {
         var end = false
         repeat {
             // Run general A-Cycle
@@ -220,7 +220,7 @@ extension ProcessingUnit {
 
 /// Move digit instruction
 extension ProcessingUnit {
-    internal func op_move_digit_zone() throws {
+    func op_move_digit_zone() throws {
         // Run general A-Cycle
         generalEPhaseCycleA()
         
@@ -267,7 +267,7 @@ extension ProcessingUnit {
 
 /// Load instruction
 extension ProcessingUnit {
-    internal func op_load() throws {
+    func op_load() throws {
         var quit = false
         
         repeat {
@@ -300,7 +300,7 @@ extension ProcessingUnit {
 
 /// No operation instruction
 extension ProcessingUnit {
-    internal func op_noop() throws {
+    func op_noop() throws {
         return
     }
 }
