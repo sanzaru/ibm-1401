@@ -90,8 +90,6 @@ Quit the emulator
     - [ ] Move characters and edit (E)
     - [ ] _UNDOCUMENTED / UNCLEAR_ (G)
     - [ ] Zero and substract (-)
-    - [ ] Load characters to word mark (L)
-    - [ ] Move characters to word mark (M)
     - [ ] Move characters to record or group (P)
     - [ ] Subtract (S)
     - [ ] Branch if word mark and/or zone (V)
