@@ -17,7 +17,7 @@ More information about the machine itself: [http://ibm-1401.info](http://ibm-140
 
 ## Requirements
 
-The code should run on any system that supports Swift 3.7 and higher.
+The code should run on any system that supports Swift 5.7 and higher.
 
 The emulator depends on [lib1401](https://github.com/sanzaru/lib1401)
 
