@@ -84,7 +84,7 @@ Quit the emulator
     - [ ] Modify address (=)
     - [ ] Zero and add (&)
     - [ ] Add (A)
-    - [ ] Branch or branch on indicator (B)
+    - [x] Branch or branch on indicator (B)
     - [ ] Compare (C)
     - [ ] Move numerical / digit (D)
     - [ ] Move characters and edit (E)

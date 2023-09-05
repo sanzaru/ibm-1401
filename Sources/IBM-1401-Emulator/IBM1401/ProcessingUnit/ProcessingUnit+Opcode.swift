@@ -24,6 +24,7 @@ extension ProcessingUnit {
         case move = "M"
         case moveDigit = "D"
         case moveZone = "Y"
+        case branch = "B"
         case halt = "."
         case noop = "N"
         case load = "L"

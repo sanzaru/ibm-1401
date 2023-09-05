@@ -108,10 +108,6 @@ extension ProcessingUnit {
     private func instructionNext() throws {
         switch iPhaseCount {
         case 0:
-            let addr = registers.addrI.intValue
-            Logger.debug("ADDR I-OP: \(addr) : \(registers.addrI) [\(coreStorage.get(from: addr, setZero: false).char ?? Character(""))]")
-            Logger.debug("I-IO REG: \(iAddrRegBlocked ? "Blocked" : "Open")")
-
             // Write address to STAR
             if iAddrRegBlocked {
                 registers.addrS = registers.addrA
@@ -119,6 +115,10 @@ extension ProcessingUnit {
             } else {
                 registers.addrS = registers.addrI
             }
+
+            let addr = registers.addrS.intValue
+            Logger.debug("ADDR I-OP: \(addr) : \(registers.addrS) [\(coreStorage.get(from: addr, setZero: false).char ?? Character(""))]")
+            Logger.debug("I-IO REG: \(iAddrRegBlocked ? "Blocked" : "Open")")
 
             // Read storage position into B-Reg
             registers.b.set(with: coreStorage.get(from: addr))
@@ -190,7 +190,9 @@ extension ProcessingUnit {
 
             // Check for branch opcode
             if (registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) ) {
-                // TODO: Implement branch instruction handling
+                iAddrRegBlocked = true
+                // FIXME: Implement parity and validity checks...
+                iPhaseCount = 0
                 return
             }
 
