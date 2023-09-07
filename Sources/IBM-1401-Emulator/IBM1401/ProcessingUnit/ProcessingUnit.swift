@@ -263,7 +263,7 @@ extension ProcessingUnit {
             // Check for opcode set word mark
             if registers.i.get().isOpCode(code: Opcodes.setWordMark.rawValue) {
                 cyclePhase = .ePhase
-                Logger.debug("EDING I-CYCLE FOR SET-WM")
+                Logger.debug("ENDING I-CYCLE FOR SET-WM")
                 return
             }
 
