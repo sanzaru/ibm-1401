@@ -192,7 +192,7 @@ extension ProcessingUnit {
             if (registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) ) {
                 iAddrRegBlocked = true
                 // FIXME: Implement parity and validity checks...
-                iPhaseCount = 0
+                stopExecutionPhase()
                 return
             }
 
@@ -232,6 +232,17 @@ extension ProcessingUnit {
             if registers.b.get().hasWordmark {
                 // FIXME: Check for specific OP code
                 // FIXME: Implement parity and validity checks...
+
+                // Check for branch opcode
+                if (registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) ) {
+                    if registers.a.get() & 1 == 1 {
+                        iAddrRegBlocked = true
+                    }
+
+                    // FIXME: Implement parity and validity checks...
+                    stopExecutionPhase()
+                    return
+                }
 
                 if registers.i.get().isOpCode(code: Opcodes.noop.rawValue) {
                     stopExecutionPhase()
