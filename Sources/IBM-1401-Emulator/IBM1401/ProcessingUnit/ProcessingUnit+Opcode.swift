@@ -208,7 +208,7 @@ extension ProcessingUnit {
             // Write A-Register to storage without wordmark
             coreStorage.set(at: addr, with: registers.a.get() & 0b01111111)
 
-            Logger.debug("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111) (\(registers.a.get().char ?? Character("")))")
+            Logger.debug("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111) (\(registers.a.get().char ?? Character("-")))")
 
             // Check A- and B-Register for WM and end E-Phase
             // FIXME: Check bit to storage as required

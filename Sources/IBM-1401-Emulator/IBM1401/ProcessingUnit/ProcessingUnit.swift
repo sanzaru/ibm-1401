@@ -117,7 +117,7 @@ extension ProcessingUnit {
             }
 
             let addr = registers.addrS.intValue
-            Logger.debug("ADDR I-OP: \(addr) : \(registers.addrS) [\(coreStorage.get(from: addr, setZero: false).char ?? Character(""))]")
+            Logger.debug("ADDR I-OP: \(addr) : \(registers.addrS) [\(coreStorage.get(from: addr, setZero: false).char ?? Character("-"))]")
             Logger.debug("I-IO REG: \(iAddrRegBlocked ? "Blocked" : "Open")")
 
             // Read storage position into B-Reg
@@ -129,7 +129,7 @@ extension ProcessingUnit {
             // Fetch instruction from address, drop word mark and reverse C-Bit
             registers.i.set(with: (registers.b.get() & 0b01111111))
 
-            Logger.debug("I-OP Instruction: \(registers.i):\(registers.i.get().char ?? Character(""))")
+            Logger.debug("I-OP Instruction: \(registers.i):\(registers.i.get().char ?? Character("-"))")
             Logger.debug("IO WM: \(registers.b.get().hasWordmark ? "YES" : "NO")")
 
         case 1, 2:
@@ -343,7 +343,7 @@ extension ProcessingUnit {
     private func executionNext() throws {
         let opcode = registers.i.get()
 
-        Logger.debug("E-PHASE: \(opcode.char ?? Character(""))")
+        Logger.debug("E-PHASE: \(opcode.char ?? Character("-"))")
 
         if opcode.isOpCode(code: Opcodes.setWordMark.rawValue) {
             op_setWordMark()
