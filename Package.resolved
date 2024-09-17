@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "lib1401",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sanzaru/lib1401.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "64d95eeb05b0b8ee406bab1c2419fd272c53d1c7"
+      }
+    }
+  ],
+  "version" : 2
+}
