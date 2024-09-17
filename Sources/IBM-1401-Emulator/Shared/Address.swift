@@ -69,7 +69,6 @@ extension Address {
     }
 }
 
-
 extension Address {
     var encoded: Int {
         return intValue > 0 ? intValue - 1 : 0
@@ -79,7 +78,6 @@ extension Address {
         return map({ $0.intValue })
     }
 }
-
 
 extension Address {
     mutating func increase() {
@@ -92,7 +90,6 @@ extension Address {
         self = value.addressValue
     }
 }
-
 
 extension Int {
     var addressValue: Address {

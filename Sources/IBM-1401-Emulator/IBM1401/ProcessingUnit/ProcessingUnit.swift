@@ -55,7 +55,6 @@ class ProcessingUnit {
     }
 }
 
-
 extension ProcessingUnit {
     func step() throws {
         if cyclePhase == .iPhase {
@@ -102,7 +101,6 @@ extension ProcessingUnit {
 
         return addr
     }
-
 
     // MARK: - Private I-Phase cycles
     private func instructionNext() throws {
@@ -189,7 +187,7 @@ extension ProcessingUnit {
             Logger.debug("IO WM: \(registers.b.get().hasWordmark ? "YES" : "NO")")
 
             // Check for branch opcode
-            if (registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) ) {
+            if registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) {
                 iAddrRegBlocked = true
                 // FIXME: Implement parity and validity checks...
                 stopExecutionPhase()
@@ -200,7 +198,6 @@ extension ProcessingUnit {
             if registers.b.get().hasWordmark {
                 // FIXME: Implement op code handling
                 Logger.debug("WORD MARK IS SET: \(registers.b.get())")
-
 
                 if registers.i.get().isOpCode(code: Opcodes.noop.rawValue) {
                     stopExecutionPhase()
@@ -234,7 +231,7 @@ extension ProcessingUnit {
                 // FIXME: Implement parity and validity checks...
 
                 // Check for branch opcode
-                if (registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) ) {
+                if registers.i.get().isOpCode(code: "B") && (registers.b.get().isBlank || registers.b.get().hasWordmark) {
                     if registers.a.get() & 1 == 1 {
                         iAddrRegBlocked = true
                     }
@@ -342,7 +339,6 @@ extension ProcessingUnit {
     }
 }
 
-
 // MARK: - E-Phase
 extension ProcessingUnit {
     internal func stopExecutionPhase() {
@@ -358,37 +354,21 @@ extension ProcessingUnit {
 
         if opcode.isOpCode(code: Opcodes.setWordMark.rawValue) {
             op_setWordMark()
-        }
-
-        else if opcode.isOpCode(code: Opcodes.clearWordMark.rawValue) {
+        } else if opcode.isOpCode(code: Opcodes.clearWordMark.rawValue) {
             op_clearWordMark()
-        }
-
-        else if opcode.isOpCode(code: Opcodes.clearStorage.rawValue) {
+        } else if opcode.isOpCode(code: Opcodes.clearStorage.rawValue) {
             try op_clearStorage()
-        }
-
-        else if opcode.isOpCode(code: Opcodes.move.rawValue) {
+        } else if opcode.isOpCode(code: Opcodes.move.rawValue) {
             try op_move()
-        }
-
-        else if opcode.isOpCode(code: Opcodes.moveDigit.rawValue) || opcode.isOpCode(code: Opcodes.moveZone.rawValue) {
+        } else if opcode.isOpCode(code: Opcodes.moveDigit.rawValue) || opcode.isOpCode(code: Opcodes.moveZone.rawValue) {
             try op_move_digit_zone()
-        }
-
-        else if opcode.isOpCode(code: Opcodes.load.rawValue) {
+        } else if opcode.isOpCode(code: Opcodes.load.rawValue) {
             try op_load()
-        }
-
-        else if opcode.isOpCode(code: Opcodes.noop.rawValue) {
+        } else if opcode.isOpCode(code: Opcodes.noop.rawValue) {
             try op_noop()
-        }
-
-        else if opcode.isOpCode(code: Opcodes.halt.rawValue) {
+        } else if opcode.isOpCode(code: Opcodes.halt.rawValue) {
             try op_halt()
-        }
-
-        else if opcode.isOpCode(code: Opcodes.print.rawValue) {
+        } else if opcode.isOpCode(code: Opcodes.print.rawValue) {
             op_print()
         }
 
@@ -399,16 +379,13 @@ extension ProcessingUnit {
         else if opcode.isOpCode(code: Opcodes.readCard.rawValue) {
             stopExecutionPhase()
             throw Exceptions.readCard
-        }
-
-        else {
+        } else {
             throw Exceptions.stopCondition("E-PHASE ERROR: INSRUCTION NOT IMPLEMENTED OR UNKNOWN: \(opcode.char ?? Character(""))")
         }
 
         stopExecutionPhase()
     }
 }
-
 
 // MARK: - Monitor
 extension ProcessingUnit {

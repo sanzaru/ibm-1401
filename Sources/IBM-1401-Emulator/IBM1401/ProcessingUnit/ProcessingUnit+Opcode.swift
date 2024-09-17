@@ -33,34 +33,31 @@ extension ProcessingUnit {
     }
 }
 
-
 // MARK: - E-Phase methods
 extension ProcessingUnit {
     /// General A-Cycle for execution phases
     private func generalEPhaseCycleA() {
         // A-Addr-Reg to STAR
         registers.addrS = registers.addrA
-        
+
         // Read storage to B-Reg
         let addr = registers.addrS.intValue
         registers.b.set(with: coreStorage.get(from: addr))
-        
+
         // Write back to storage
         coreStorage.set(at: addr, with: registers.b.get())
-        
+
         // B-Reg to A-Reg
         registers.a.set(with: registers.b.get())
-        
+
         // Decrease A-Addr-Reg
         registers.addrA.decrease()
-        
+
         // FIXME: Implement parity and validity checks...
     }
 }
 
-
 // MARK: - Instructions
-
 
 /// Set / clear word mark instuction
 extension ProcessingUnit {
@@ -68,7 +65,7 @@ extension ProcessingUnit {
         // B-Cycle
         func cycleB() {
             registers.addrS = registers.addrB
-            
+
             let addr = registers.addrS.encoded
             registers.b.set(with: coreStorage.get(from: addr))
 
@@ -86,13 +83,13 @@ extension ProcessingUnit {
 
             // Decrease B-Address-Register
             registers.addrB.decrease()
-            
+
             // FIXME: Implement parity and validity checks...
         }
-        
+
         // A-Cycle
         registers.addrS = registers.addrA
-        
+
         // Read storage into B-Register
         let addr = registers.addrS.encoded
         registers.b.set(with: coreStorage.get(from: addr))
@@ -129,33 +126,32 @@ extension ProcessingUnit {
     }
 }
 
-
 /// Clear storage instruction
 /// NOTE: This instruction always skips the A-Cycle of the I-Operation
 extension ProcessingUnit {
     func op_clearStorage() throws {
         var addr = registers.addrB.intValue
-        
+
         // Calculate the address the instruction should end
         let end = Int(registers.addrB[0].decoded) * 100
-        
+
         Logger.debug("RUNNING CLEAR STORAGE: \(registers.addrB) - From: \(addr) - \(end)...")
 
         // Decrease B-Reg-Addr
         repeat {
             // B-Addr-Reg to STAR
             registers.addrS = registers.addrB
-            
+
             // Read STAR to B-Reg
             addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
-            
+
             // Set C-Bit at addr / clear storage
             coreStorage.set(at: addr, with: 0b01000000)
 
             // Decrease B-Address-Register
             registers.addrB.decrease()
-            
+
             // FIXME: Implement parity and validity checks...
         } while addr >= end
 
@@ -187,12 +183,12 @@ extension ProcessingUnit {
         repeat {
             // Run general A-Cycle
             generalEPhaseCycleA()
-            
+
             // B-Cycle
-            
+
             // B-Addr-Reg to STAR
             registers.addrS = registers.addrB
-            
+
             // Read storage to B-Reg
             let addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
@@ -218,68 +214,66 @@ extension ProcessingUnit {
     }
 }
 
-
 /// Move digit instruction
 extension ProcessingUnit {
     func op_move_digit_zone() throws {
         // Run general A-Cycle
         generalEPhaseCycleA()
-        
+
         // B-Cycle
-        
+
         // B-Addr-Reg to STAR
         registers.addrS = registers.addrB
-        
+
         // Read storage into B-Reg
         let addr = registers.addrS.intValue
         registers.b.set(with: coreStorage.get(from: addr))
-        
+
         // Check op code
         var value: Word = 0
         if registers.i.get().isOpCode(code: Opcodes.moveDigit.rawValue) {
             // Move B-Reg WM and zones to new value
             value = 0b10110000 & registers.b.get()
-            
+
             // Move A-Reg digit value to new value
             value &= 0b00001111 & registers.a.get()
         } else {
             // Move B-Reg digit value to new value
             value = 0b00001111 & registers.b.get()
-            
+
             // Move A-Reg WM and zones to new value
             value &= 0b10110000 & registers.a.get()
         }
-        
+
         // Set check bit if needed
         if !value.parityCheck {
             value.setCheckBit()
         }
-        
+
         // Write new value to storage
         coreStorage.set(at: addr, with: value)
-        
+
         // Decrease B-Addr-Reg
         registers.addrB.decrease()
-        
+
         // FIXME: Implement parity and validity checks...
     }
 }
-
 
 /// Load instruction
 extension ProcessingUnit {
     func op_load() throws {
         var quit = false
-        
+
         repeat {
             // Run general A-Cycle
             generalEPhaseCycleA()
-            
+
             // B-Cycle
-            
+
             // B-Addr-Reg to STAR
             registers.addrS = registers.addrB
-            
+
             // Read storage to B-Reg
             let addr = registers.addrS.intValue
             registers.b.set(with: coreStorage.get(from: addr))
@@ -291,13 +285,12 @@ extension ProcessingUnit {
             coreStorage.set(at: addr, with: registers.a.get() & 0b10111111)
 
             // FIXME: Implement parity and validity checks...
-            
+
             // Check for WM in A-Reg
             quit = registers.a.get().hasWordmark
         } while !quit
     }
 }
-
 
 /// No operation instruction
 extension ProcessingUnit {
@@ -305,7 +298,6 @@ extension ProcessingUnit {
         return
     }
 }
-
 
 extension ProcessingUnit {
     func op_print() {

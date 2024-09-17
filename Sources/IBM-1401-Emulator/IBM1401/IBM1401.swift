@@ -73,11 +73,11 @@ final class IBM1401 {
 
     func dumpStorage() {
         let breakPoint = 20
-        
+
         func leading(index: Int) {
             print(String(format: "%03d ", row*breakPoint+1), terminator: "")
         }
-        
+
         (1...breakPoint).forEach {
             if $0 == 1 {
                 print(String(format: "    %03d", $0), terminator: " ")
@@ -95,30 +95,30 @@ final class IBM1401 {
             }
         }
         print("")
-        
+
         var row = 0
         leading(index: 0)
-        
+
         (0..<pu.coreStorage.count).forEach {
             let v = String(format: "%03d", pu.coreStorage.get(from: $0, setZero: false))
-            
+
             if $0 > 0 && $0 % breakPoint == 0 {
                 print("")
                 row += 1
-                
+
                 if $0 > 0 && $0 % 100 == 0 {
                     print("")
                 }
-                
+
                 leading(index: (row*breakPoint))
             }
-                        
+
             print(v, terminator: $0 == pu.coreStorage.count-1 ? "" : ",")
         }
     }
-    
+
     func start() throws {
-        try pu.step()        
+        try pu.step()
     }
 
     func readCard() {

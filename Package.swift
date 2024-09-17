@@ -14,15 +14,15 @@ let package = Package(
         .executableTarget(
             name: "IBM-1401-Emulator",
             dependencies: [
-                .product(name: "Lib1401", package: "Lib1401"),
+                .product(name: "Lib1401", package: "Lib1401")
             ]
         ),
         .testTarget(
             name: "IBM-1401-EmulatorTests",
             dependencies: [
                 "IBM-1401-Emulator",
-                .product(name: "Lib1401", package: "Lib1401"),
+                .product(name: "Lib1401", package: "Lib1401")
             ]
-        ),
+        )
     ]
 )

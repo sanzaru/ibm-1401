@@ -112,7 +112,7 @@ extension Word {
     // MARK: - Mutating
     mutating func setWordMark() {
         self |= 0b10000000
-        
+
         if !parityCheck {
             self ^= 0b01000000
         }
@@ -120,9 +120,9 @@ extension Word {
 
     mutating func setCheckBit() {
         self |= 0b01000000
-        
+
         if !parityCheck {
             self ^= 0b01000000
         }
-    }    
+    }
 }

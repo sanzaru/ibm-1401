@@ -109,10 +109,8 @@ struct IBM1401App {
         case "reset", "rst":
             ibm1401.reset()
             Logger.info("System reset")
-
-        default:
+            default:
             print("Error: Unknown command \"\(command)\"")
-            break
         }
     }
 }

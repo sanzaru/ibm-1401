@@ -19,7 +19,7 @@ final class IBM_1401Tests: XCTestCase {
 
     static var allTests = [
         ("testProcessExecution", testProcessExecution),
-        ("testParityCheck", testParityCheck),
+        ("testParityCheck", testParityCheck)
     ]
 }
 
@@ -36,7 +36,6 @@ extension IBM_1401Tests {
         XCTAssertFalse(process.isRunning)
     }
 }
-
 
 // MARK: Word tests
 extension IBM_1401Tests {
