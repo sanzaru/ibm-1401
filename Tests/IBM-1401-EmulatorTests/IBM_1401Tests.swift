@@ -54,4 +54,14 @@ extension IBM_1401Tests {
             XCTAssert($0.value.valid, "Validity test failed for character \($0.key): \($0.value) \($0.value.binaryString)")
         }
     }
+
+    func testBitCount() throws {
+        let values: [Character: Int] = ["I": 5, "X": 5, "A": 3, "\"": 7]
+
+        values.forEach {
+            let value = Lib1401.CharacterEncodings.shared.simh[$0.key]
+            let count = value?.bitsSetCount ?? 0
+            XCTAssertEqual(count, $0.value, "Bit count failed for character \($0.key): expected \($0.value), got \(count)")
+        }
+    }
 }
