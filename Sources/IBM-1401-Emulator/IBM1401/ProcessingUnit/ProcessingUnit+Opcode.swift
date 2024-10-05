@@ -304,26 +304,27 @@ extension ProcessingUnit {
     func op_print() {
         let filename = "printer.out.txt"
         let bytes = coreStorage.getPrintStorage()
-        if let message = Lib1401.CharacterEncodings.shared.decode(words: bytes) {
+        guard let message = Lib1401.CharacterEncodings.shared.decode(words: bytes) else {
+            return
+        }
+
+        do {
             Logger.debug("PRINTER DATA: \(message.count) bytes")
             Logger.info("PRINTER OUT: \(message)")
 
-            do {
-                var body = ""
-                if let url = URL(string: "file://\(FileManager.default.currentDirectoryPath)/\(filename)"),
-                    let data = try? String(contentsOf: url) {
-                    body = data
-                }
-
-                try "\(body)\(message)\n".write(toFile: "./\(filename)", atomically: false, encoding: .utf8)
-                Logger.info("PRINTER WRITTEN: \(filename): \(message.count+1) bytes")
-            } catch {
-                Logger.error("ERROR WRITING PRINT OUT: \(error.localizedDescription)")
+            guard let url = URL(string: "file://\(FileManager.default.currentDirectoryPath)/\(filename)") else {
+                return
             }
+
+            let data = try String(contentsOf: url)
+            try "\(data)\(message)\n".write(toFile: "./\(filename)", atomically: false, encoding: .utf8)
+
+            Logger.info("PRINTER WRITTEN: \(filename): \(message.count+1) bytes")
+        } catch {
+            Logger.error("ERROR WRITING PRINT OUT: \(error.localizedDescription)")
         }
     }
 }
-
 
 extension ProcessingUnit {
     func op_compare() {
