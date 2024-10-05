@@ -14,6 +14,7 @@
 
 import Foundation
 
+@main
 struct IBM1401App {
     static var shared = IBM1401App()
 
@@ -109,10 +110,13 @@ struct IBM1401App {
         case "reset", "rst":
             ibm1401.reset()
             Logger.info("System reset")
-            default:
+
+        default:
             print("Error: Unknown command \"\(command)\"")
         }
     }
-}
 
-IBM1401App.shared.run()
+    static func main() {
+        IBM1401App.shared.run()
+    }
+}

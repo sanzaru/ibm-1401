@@ -36,10 +36,8 @@ extension Word {
     var parityCheck: Bool {
         var count = 0
 
-        for i in 0...6 {
-            if (self >> i) & 1 == 1 {
-                count += 1
-            }
+        for i in 0...6 where (self >> i) & 1 == 1 {
+            count += 1
         }
 
         return !count.isMultiple(of: 2)
@@ -48,10 +46,8 @@ extension Word {
     var bitsSetCount: Int {
         var count = 0
 
-        for i in 0...6 {
-            if (self >> i) & 1 == 1 {
-                count += 1
-            }
+        for i in 0...6 where (self >> i) & 1 == 1 {
+            count += 1
         }
 
         return count
@@ -79,10 +75,8 @@ extension Word {
     }
 
     var encoded: Word {
-        for (key, value) in Lib1401.CharacterEncodings.shared.simh {
-            if String(key) == String(self) {
-                return hasWordmark ? value ^ 0b10000000 : value
-            }
+        for (key, value) in Lib1401.CharacterEncodings.shared.simh where String(key) == String(self) {
+            return hasWordmark ? value ^ 0b10000000 : value
         }
 
         return 0
