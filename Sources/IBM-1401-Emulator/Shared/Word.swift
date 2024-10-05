@@ -41,7 +41,27 @@ extension Word {
     }
 
     var valid: Bool {
-        Lib1401.CharacterEncodings.shared.simh.contains(where: { self.decoded & $1.decoded == 0 })
+        var check = false
+        Lib1401.CharacterEncodings.shared.simh.forEach {
+            if self & $1 == 0 {
+                check = true
+                return
+            }
+        }
+
+        return check
+    }
+
+    var parityCheck: Bool {
+        var count = 0
+
+        for i in 0...6 {
+            if (self >> i) & 1 == 1 {
+                count += 1
+            }
+        }
+
+        return count % 2 != 0
     }
 
     var bitsSetCount: Int {
@@ -54,10 +74,6 @@ extension Word {
         }
 
         return count
-    }
-
-    var parityCheck: Bool {
-        return !bitCount.isMultiple(of: 2)
     }
 
     var dropWordmark: Word {
