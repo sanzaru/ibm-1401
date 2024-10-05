@@ -41,15 +41,7 @@ extension Word {
     }
 
     var valid: Bool {
-        var check = false
-        Lib1401.CharacterEncodings.shared.simh.forEach {
-            if self & $1 == 0 {
-                check = true
-                return
-            }
-        }
-
-        return check
+        Lib1401.CharacterEncodings.shared.simh.contains(where: { self == $0.value })
     }
 
     var parityCheck: Bool {
@@ -61,7 +53,7 @@ extension Word {
             }
         }
 
-        return count % 2 != 0
+        return !count.isMultiple(of: 2)
     }
 
     var bitsSetCount: Int {

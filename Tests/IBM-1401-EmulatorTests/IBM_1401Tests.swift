@@ -40,8 +40,8 @@ extension IBM_1401Tests {
 // MARK: Word tests
 extension IBM_1401Tests {
     func testParityCheck() throws {
-        Lib1401.CharacterEncodings.shared.simh.forEach { index, char in
-            XCTAssert(char.parityCheck, "Parity test failed for character \(index) with bit count: \(char.bitsSetCount)")
+        Lib1401.CharacterEncodings.shared.simh.forEach {
+            XCTAssert($0.value.parityCheck, "Parity test failed for character \($0.value) with key \($0.key) with bit count: \($0.value.bitsSetCount)")
 
             var wm: Word = Lib1401.CharacterEncodings.shared.simh["A"]!
             wm.setWordMark()
@@ -50,8 +50,8 @@ extension IBM_1401Tests {
     }
 
     func testValidityCheck() throws {
-        Lib1401.CharacterEncodings.shared.simh.forEach { index, char in
-            XCTAssert(char.valid, "Validity test failed for character \(index): \(char.binaryString)")
+        Lib1401.CharacterEncodings.shared.simh.forEach {
+            XCTAssert($0.value.valid, "Validity test failed for character \($0.key): \($0.value) \($0.value.binaryString)")
         }
     }
 }
