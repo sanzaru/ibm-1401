@@ -24,13 +24,6 @@ More information about the machine itself: [http://ibm-1401.info](http://ibm-140
   - [Requirements](#requirements)
   - [Manual](#manual)
     - [Emulator commands](#emulator-commands)
-      - [Load program (l / load)](#load-program-l--load)
-      - [Start / Step (s / start)](#start--step-s--start)
-      - [Run (r / run)](#run-r--run)
-      - [Dump storage (d / dump)](#dump-storage-d--dump)
-      - [Monitor (m / monitor)](#monitor-m--monitor)
-      - [Reset (rst / reset)](#reset-rst--reset)
-      - [Quit (q / quit)](#quit-q--quit)
   - [Features](#features)
 
 
@@ -47,38 +40,15 @@ You will be welcomed with a prompt where you can enter your commands.
 
 ### Emulator commands
 
-#### Load program (l / load)
-
-You can load external files with punch card code when providing an **absolute** path to the load command.
-
-**Example:** ```l /some/absolute/path/to/a/file.cd```
-
-Without any file name a default hello world program will be loaded.
-
-#### Start / Step (s / start)
-
-This command emulates pressing the IBM 1401 start button in single step mode.
-
-#### Run (r / run)
-
-This command emulates pressing the IBM 1401 start button in run mode.
-
-#### Dump storage (d / dump)
-
-This command dumps the complete storage. Note that the output is in BCD mode.
-
-#### Monitor (m / monitor)
-
-This command dumps all registers and contents.
-
-#### Reset (rst / reset)
-
-Terminate execution cycle, reset core storage and registers. This command allows you to load and run another program.
-
-#### Quit (q / quit)
-
-Quit the emulator
-
+| Name | Command | Description | Example |
+| --- | --- | --- | --- |
+| **Load program** | `l / load` | You can load external files with punch card code when providing an **absolute** path to the load command.<br><br> Without any file name a default hello world program will be loaded.| ```l /some/absolute/path/to/a/file.cd``` |
+| **Start / Step** | `s / start` | This command emulates pressing the IBM 1401 start button in single step mode. | |
+| **Run** | `r / run` | This command emulates pressing the IBM 1401 start button in run mode. | |
+| **Dump storage** | `d / dump` | This command dumps the complete storage. Note that the output is in BCD mode. | |
+| **Monitor** | `m / monitor` | This command dumps all registers and contents. | |
+| **Reset** | `rst / reset` | Terminate execution cycle, reset core storage and registers. This command allows you to load and run another program. | |
+| **Quit** | `q / quit` | Quit the emulator | |
 
 ## Features
 
