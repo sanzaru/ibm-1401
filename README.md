@@ -105,11 +105,11 @@ Quit the emulator
     - [ ] Move numerical / digit (D)
     - [ ] Move characters and edit (E)
     - [ ] _UNDOCUMENTED / UNCLEAR_ (G)
-    - [ ] Zero and substract (-)
+    - [ ] Zero and subtract (-)
     - [ ] Move characters to record or group (P)
     - [ ] Subtract (S)
     - [ ] Branch if word mark and/or zone (V)
-    - [ ] Move characters and supress zeros (Z)
+    - [ ] Move characters and suppress zeros (Z)
     - [x] Read a card (1)
     - [x] Read a card and branch (1)
     - [ ] Write and read (3)
@@ -118,7 +118,7 @@ Quit the emulator
     - [ ] Write and punch (6)
     - [ ] Write, read and punch (7)
 
-- [ ] **Optioal opcodes:**
+- [ ] **Optional opcodes:**
     - [ ] Multiply ( )
     - [ ] Store B-Address register (H)
     - [ ] Store A-Address register (Q)

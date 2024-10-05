@@ -67,7 +67,7 @@ extension ProcessingUnit {
 
 // MARK: - I-Phase
 extension ProcessingUnit {
-    /// Increase the intruction address, write it to I-Addr-Reg and set STAR to I-Addr-Reg
+    /// Increase the instruction address, write it to I-Addr-Reg and set STAR to I-Addr-Reg
     private func increaseInstructionAddress() {
         var addr = registers.addrS.intValue
         addr += 1
@@ -300,7 +300,7 @@ extension ProcessingUnit {
             fatalError("ERROR: Unknown I-Cycle count: \(iPhaseCount)")
         }
 
-        // Increase intruction address and write it to I-Addr-Reg
+        // Increase instruction address and write it to I-Addr-Reg
         if cyclePhase == .iPhase {
             Logger.debug("I-CYCLE END")
             increaseInstructionAddress()
@@ -330,7 +330,7 @@ extension ProcessingUnit {
 
         registers.a.set(with: registers.b.get())
 
-        // Increase intruction address and write it to I-Addr-Reg
+        // Increase instruction address and write it to I-Addr-Reg
         increaseInstructionAddress()
 
         cycleIOp8()
@@ -380,7 +380,7 @@ extension ProcessingUnit {
             stopExecutionPhase()
             throw Exceptions.readCard
         } else {
-            throw Exceptions.stopCondition("E-PHASE ERROR: INSRUCTION NOT IMPLEMENTED OR UNKNOWN: \(opcode.char ?? Character(""))")
+            throw Exceptions.stopCondition("E-PHASE ERROR: INSTRUCTION NOT IMPLEMENTED OR UNKNOWN: \(opcode.char ?? Character(""))")
         }
 
         stopExecutionPhase()
