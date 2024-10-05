@@ -30,6 +30,7 @@ extension ProcessingUnit {
         case load = "L"
         case print = "2"
         case readCard = "1"
+        case compare = "C"
     }
 }
 
@@ -204,7 +205,7 @@ extension ProcessingUnit {
             // Write A-Register to storage without wordmark
             coreStorage.set(at: addr, with: registers.a.get() & 0b01111111)
 
-            Logger.debug("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111) (\(registers.a.get().char ?? Character("-")))")
+            Logger.debug("MOVED VALUE TO CORE STORAGE: \(addr) -> \(registers.a.get() & 0b01111111) (\(registers.a.get().char ?? Character("")))")
 
             // Check A- and B-Register for WM and end E-Phase
             // FIXME: Check bit to storage as required
@@ -323,3 +324,47 @@ extension ProcessingUnit {
     }
 }
 
+
+extension ProcessingUnit {
+    func op_compare() {
+        // FIXME: Turn on equal latch
+        Logger.debug("EQUAL LATCH ON")
+
+        var quit = false
+        repeat {
+            generalEPhaseCycleA()
+
+            // B-Addr-Reg to STAR
+            registers.addrS = registers.addrB
+
+            // Read storage to B-Reg
+            let addr = registers.addrS.intValue
+            registers.b.set(with: coreStorage.get(from: addr))
+
+            // Read back to storage
+            coreStorage.set(at: addr, with: registers.b.get())
+
+            // Decrease B-Addr-Register
+            registers.addrB.decrease()
+
+            Logger.debug("COMPARING: \(registers.a.get()) == \(registers.b.get())")
+
+            if registers.a.get() != registers.b.get() {
+                // FIXME: Turn off equal latch
+                Logger.debug("EQUAL LATCH OFF")
+            }
+
+            if registers.b.get().hasWordmark {
+                quit = true
+            }
+
+            if registers.a.get().hasWordmark {
+                // FIXME: Turn off equal latch
+                Logger.debug("EQUAL LATCH OFF (WM IN A-REG)")
+                quit = true
+            }
+        } while !quit
+
+        Logger.debug("COMPARE ENDED")
+    }
+}
