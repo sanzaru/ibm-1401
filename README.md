@@ -1,19 +1,38 @@
 # IBM 1401 Emulator in Swift
 
-This project is some very **early** and **inclomplete** version of an IBM 1401 emulator written in Swift.
+This project is some very **early** and **incomplete** version of an IBM 1401 emulator written in Swift.
 
-While studying the machine and finishing a simple hello world punch card code, it was hard for me to test my code as there are not many emulators for the machine and I was not able to make simh run at this time.
+While studying the machine and finishing a simple hello world punch card code, it was hard for me to test my code as
+there are not many emulators for the machine and I was not able to make simh run at this time.
 
-With the help of the amazing emulator of [https://rolffson.de](https://rolffson.de) I was finally able to punch and run my code virtually on his software. Unfortunately, the project is only availble for Microsoft Windows and more a 3D simulation than a convinient emulator, so I descided to write my own...
+With the help of the amazing emulator of [https://rolffson.de](https://rolffson.de) I was finally able to punch and run
+my code virtually on his software. Unfortunately, the project is only available for Microsoft Windows and more a 3D
+simulation than a convenient emulator, so I decided to write my own...
 
-| **⚠️ The whole emulator is incomplete. For now, not all opcodes are implemented and reading external files into the storage is not finished.** |
-| -------- |
+> [!IMPORTANT]
+> The whole emulator is incomplete. For now, not all opcodes and almost no validity and parity checks are implemented, yet.
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/BRL61-IBM_1401.jpg" width="400">
 
 *> Image: [https://upload.wikimedia.org/wikipedia/commons/c/cb/BRL61-IBM_1401.jpg](https://upload.wikimedia.org/wikipedia/commons/c/cb/BRL61-IBM_1401.jpg)*
 
 More information about the machine itself: [http://ibm-1401.info](http://ibm-1401.info)
+
+# Table of contents
+- [IBM 1401 Emulator in Swift](#ibm-1401-emulator-in-swift)
+- [Table of contents](#table-of-contents)
+  - [Requirements](#requirements)
+  - [Manual](#manual)
+    - [Emulator commands](#emulator-commands)
+      - [Load program (l / load)](#load-program-l--load)
+      - [Start / Step (s / start)](#start--step-s--start)
+      - [Run (r / run)](#run-r--run)
+      - [Dump storage (d / dump)](#dump-storage-d--dump)
+      - [Monitor (m / monitor)](#monitor-m--monitor)
+      - [Reset (rst / reset)](#reset-rst--reset)
+      - [Quit (q / quit)](#quit-q--quit)
+  - [Features](#features)
+
 
 ## Requirements
 
@@ -23,11 +42,8 @@ The emulator depends on [lib1401](https://github.com/sanzaru/lib1401)
 
 ## Manual
 
-### Usage
-
-Inside the project directory run: ```swift run```
-
-to start an emulator. You will be welcomed with a prompt where you can enter commands.
+Inside the project directory run: ```swift run``` to start the emulator.
+You will be welcomed with a prompt where you can enter your commands.
 
 ### Emulator commands
 
