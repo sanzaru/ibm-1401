@@ -28,22 +28,11 @@ extension Word {
         self & 0b10000000 == 0b10000000
     }
 
-    var bitCount: Int {
-        var count = 0
-
-        (0..<8).forEach {
-            if self >> $0 & 1 == 1 {
-                count += 1
-            }
-        }
-
-        return count
-    }
-
     var valid: Bool {
         Lib1401.CharacterEncodings.shared.simh.contains(where: { self == $0.value })
     }
 
+    /// Check for odd number of bits
     var parityCheck: Bool {
         var count = 0
 
