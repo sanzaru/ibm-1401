@@ -1,3 +1,5 @@
+[![Swift](https://github.com/sanzaru/ibm-1401/actions/workflows/swift.yml/badge.svg)](https://github.com/sanzaru/ibm-1401/actions/workflows/swift.yml)
+
 # IBM 1401 Emulator in Swift
 
 This project is some very **early** and **incomplete** version of an IBM 1401 emulator written in Swift.
