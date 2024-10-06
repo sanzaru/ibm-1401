@@ -9,14 +9,19 @@ With the help of the amazing emulator of [https://rolffson.de](https://rolffson.
 my code virtually on his software. Unfortunately, the project is only available for Microsoft Windows and more a 3D
 simulation than a convenient emulator, so I decided to write my own...
 
-> [!IMPORTANT]
-> The whole emulator is incomplete. For now, not all opcodes and almost no validity and parity checks are implemented, yet.
-
 <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/BRL61-IBM_1401.jpg" width="400">
 
 *> Image: [https://upload.wikimedia.org/wikipedia/commons/c/cb/BRL61-IBM_1401.jpg](https://upload.wikimedia.org/wikipedia/commons/c/cb/BRL61-IBM_1401.jpg)*
 
 More information about the machine itself: [http://ibm-1401.info](http://ibm-1401.info)
+
+<hr>
+
+> [!IMPORTANT]
+> The whole emulator is incomplete. For now, not all opcodes and almost no validity and parity checks are implemented, yet.
+
+<hr>
+<br>
 
 # Table of contents
 - [IBM 1401 Emulator in Swift](#ibm-1401-emulator-in-swift)
