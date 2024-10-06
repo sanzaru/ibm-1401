@@ -66,8 +66,6 @@ You will be welcomed with a prompt where you can enter your commands.
     - [x] Load (L)
     - [x] Write a line (2) - **Partially implemented**
     - [x] Clear word mark ())
-    - [ ] Divide (()
-    - [ ] Modify address (=)
     - [ ] Zero and add (&)
     - [ ] Add (A)
     - [x] Branch or branch on indicator (B)
@@ -76,7 +74,6 @@ You will be welcomed with a prompt where you can enter your commands.
     - [ ] Move characters and edit (E)
     - [ ] _UNDOCUMENTED / UNCLEAR_ (G)
     - [ ] Zero and subtract (-)
-    - [ ] Move characters to record or group (P)
     - [ ] Subtract (S)
     - [ ] Branch if word mark and/or zone (V)
     - [ ] Move characters and suppress zeros (Z)
@@ -87,10 +84,15 @@ You will be welcomed with a prompt where you can enter your commands.
     - [ ] Read and punch (5)
     - [ ] Write and punch (6)
     - [ ] Write, read and punch (7)
+    - [ ] Move zone (Z)
 
-- [ ] **Optional opcodes:**
+- [ ] **Special:**
+    - [ ] Divide (()
+    - [ ] Select stacker and other device controls (K)
+    - [ ] Modify address (=)
     - [ ] Multiply ( )
     - [ ] Store B-Address register (H)
+    - [ ] Move characters to record or group (P)
     - [ ] Store A-Address register (Q)
     - [ ] Branch if bit equal (W)
     - [ ] Move and insert zeros (X)
@@ -103,11 +105,5 @@ You will be welcomed with a prompt where you can enter your commands.
 - [ ] **Printer:**
     - [ ] Control carriage (F)
 
-- [ ] **Bits:**
-    - [ ] Move zone (Z)
-
-  - [ ] **Special:**
-    - [ ] Select stacker and other device controls (K)
-
-  - [ ] **1460-Features:**
+- [ ] **1460-Features:**
     - [ ] Translate (T)
